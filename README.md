@@ -14,23 +14,6 @@
 
 > **Silta** means *bridge* in Finnish — the platform bridges the gap between fast, scalable AI guidance and trusted, regulated human mortgage advice.
 
-## 📋 Table of Contents
-
-- [Problem](#-the-problem)
-- [Solution](#-the-solution)
-- [Features](#-features)
-- [Quick Start](#-quick-start)
-- [Demo Walkthrough](#-demo-walkthrough)
-- [Architecture](#-architecture)
-- [Tech Stack](#-tech-stack)
-- [Project Structure](#-project-structure)
-- [AI Agent Orchestration](#-ai-agent-orchestration)
-- [Scaling, Risks & Security](#-scaling-risks--security)
-- [Roadmap](#-roadmap)
-- [License](#-license)
-
----
-
 ## 🎯 The Problem
 
 Mortgage origination is still highly manual and slow. **Customers** wait for callbacks, struggle with terminology, upload the wrong documents, and have no visibility into where their application stands. **Mortgage advisors** spend the majority of their time answering repetitive questions and chasing paperwork — instead of giving high-value advice on complex situations.
