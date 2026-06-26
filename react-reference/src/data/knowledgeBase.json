@@ -1,0 +1,422 @@
+[
+  {
+    "id": "b001",
+    "category": "basics",
+    "question": "What is a mortgage?",
+    "answer": "A mortgage is a loan used to purchase a property, where the property itself serves as collateral for the lender. You repay the loan over an agreed term — typically 20 to 30 years — through monthly instalments that cover interest and, depending on the mortgage type, repayment of the principal itself.",
+    "tags": ["mortgage", "basics", "definition", "loan"]
+  },
+  {
+    "id": "b002",
+    "category": "basics",
+    "question": "What does the term 'principal' mean in a mortgage?",
+    "answer": "The principal is the original amount you borrowed from the lender. As you make monthly repayments, the principal decreases. Interest is always calculated on the outstanding principal balance, which is why the interest portion of your payment changes over time.",
+    "tags": ["principal", "terminology", "basics"]
+  },
+  {
+    "id": "b003",
+    "category": "basics",
+    "question": "What is NHG — Nationale Hypotheek Garantie?",
+    "answer": "NHG is a Dutch national mortgage guarantee scheme available for mortgages up to a set value limit (currently around €435,000). It can offer more favourable interest rates and provides additional protection in specific circumstances such as job loss, relationship breakdown or disability — subject to NHG's own conditions. There is a one-time premium to activate it.",
+    "tags": ["nhg", "guarantee", "basics", "netherlands"]
+  },
+  {
+    "id": "b004",
+    "question": "What does loan-to-value (LTV) mean?",
+    "category": "basics",
+    "answer": "Loan-to-value compares your mortgage amount to the market value of the property. For example, if you borrow €300,000 on a property worth €375,000, your LTV is 80%. A lower LTV means you are borrowing less relative to the property value, which typically results in lower interest rates and less risk for the lender.",
+    "tags": ["ltv", "loan-to-value", "basics", "valuation"]
+  },
+  {
+    "id": "b005",
+    "category": "basics",
+    "question": "What is a mortgage term?",
+    "answer": "The mortgage term is the total agreed duration of your loan — typically 20 or 30 years. During this period you make regular repayments. The interest rate may be fixed for only a portion of the term (the interest rate period), after which it can be renegotiated or switches to a variable rate.",
+    "tags": ["term", "duration", "basics"]
+  },
+  {
+    "id": "b006",
+    "category": "basics",
+    "question": "What is the difference between gross and net monthly mortgage cost?",
+    "answer": "The gross monthly cost is your mortgage payment before any tax relief. The net monthly cost is what you actually pay after the applicable mortgage interest deduction (hypotheekrenteaftrek) reduces your tax bill. In the Netherlands, mortgage interest can be deducted from taxable income, which meaningfully reduces the effective monthly cost for many homeowners.",
+    "tags": ["gross", "net", "tax", "cost", "basics"]
+  },
+  {
+    "id": "b007",
+    "category": "basics",
+    "question": "What does a mortgage advisor do?",
+    "answer": "A mortgage advisor reviews your complete financial situation, validates documents, explains your options in detail, and provides the formal advice required before a mortgage offer is issued. Advisors are regulated and responsible for suitability — they ensure the recommended product genuinely matches your personal and financial circumstances. Silta's AI handles guidance and preparation; your advisor handles the formal recommendation.",
+    "tags": ["advisor", "role", "basics", "human"]
+  },
+  {
+    "id": "b008",
+    "category": "basics",
+    "question": "What is a mortgage offer?",
+    "answer": "A mortgage offer (hypotheekofferte) is a formal, binding proposal from a lender that sets out the loan amount, interest rate, term and conditions. It is issued after your application, documents and advisor review are all completed. You typically have a set period to accept it.",
+    "tags": ["offer", "binding", "basics"]
+  },
+  {
+    "id": "b009",
+    "category": "basics",
+    "question": "What role does a notary play in buying a home?",
+    "answer": "The notary (notaris) handles the legal transfer of property ownership and registers the mortgage deed. They verify the purchase agreement, confirm that the seller has clear title, draw up the transfer deed, and register everything with the land registry (Kadaster). The notary appointment is typically the final step before you receive the keys.",
+    "tags": ["notary", "legal", "closing", "basics"]
+  },
+  {
+    "id": "b010",
+    "category": "basics",
+    "question": "Should I buy or rent a home?",
+    "answer": "This depends on your financial stability, how long you plan to stay in one location, local market conditions, and personal preferences. Silta can help you understand the mortgage side of buying, but this is ultimately a personal and financial decision. A mortgage advisor can run the numbers for your specific situation and help you compare the long-term costs of renting versus buying.",
+    "tags": ["rent", "buy", "basics", "decision"]
+  },
+  {
+    "id": "p001",
+    "category": "products",
+    "question": "What is an annuity mortgage?",
+    "answer": "An annuity mortgage keeps your gross monthly payment relatively stable throughout the entire term. In the early years, a larger portion of the payment covers interest and a smaller portion repays the principal. Over time, as the outstanding balance decreases, the interest portion shrinks and the repayment portion grows — keeping the total monthly amount roughly the same.",
+    "tags": ["annuity", "products", "monthly payment"]
+  },
+  {
+    "id": "p002",
+    "category": "products",
+    "question": "What is a linear mortgage?",
+    "answer": "A linear mortgage repays the same fixed amount of principal every month, so the outstanding balance decreases steadily and predictably. Because interest is calculated on a shrinking balance, your monthly payment starts higher and gradually decreases over the term. You pay less total interest over the life of the loan compared to an annuity mortgage.",
+    "tags": ["linear", "products", "principal repayment"]
+  },
+  {
+    "id": "p003",
+    "category": "products",
+    "question": "What is the key difference between annuity and linear mortgages?",
+    "answer": "The main difference is in monthly payment pattern and total interest paid. An annuity mortgage has stable gross monthly payments, making it easier to budget — but you pay more total interest over the term. A linear mortgage starts with higher payments that decrease over time and results in less total interest paid. For customers with predictable income, annuity often provides more comfort; for those wanting to minimise total cost, linear can be advantageous.",
+    "tags": ["annuity", "linear", "comparison", "products"]
+  },
+  {
+    "id": "p004",
+    "category": "products",
+    "question": "What is a fixed interest rate period?",
+    "answer": "A fixed interest rate period locks your interest rate for an agreed number of years — commonly 1, 5, 10, 20 or 30 years. During this period, your interest component stays the same regardless of market movements, giving you predictable monthly costs. After the fixed period ends, you can renegotiate or switch to a variable rate.",
+    "tags": ["fixed rate", "interest", "products", "predictability"]
+  },
+  {
+    "id": "p005",
+    "category": "products",
+    "question": "What is a variable interest rate mortgage?",
+    "answer": "A variable interest rate can move up or down in line with market conditions, typically tracked against Euribor or another benchmark. Monthly payments can change, usually with short notice. Variable rates sometimes start lower than fixed rates, but they carry more uncertainty. Some lenders offer a cap on how high the rate can rise.",
+    "tags": ["variable rate", "euribor", "products", "risk"]
+  },
+  {
+    "id": "p006",
+    "category": "products",
+    "question": "Can I combine different mortgage types or rate periods?",
+    "answer": "Yes. Many lenders allow you to split your mortgage into parts — for example, half on a 10-year fixed rate and half on a 20-year fixed rate. This can balance cost certainty with flexibility. Your advisor will help assess which combination makes sense for your income stability, risk tolerance and plans.",
+    "tags": ["split", "combine", "products", "flexibility"]
+  },
+  {
+    "id": "p007",
+    "category": "products",
+    "question": "What is an interest-only mortgage?",
+    "answer": "With an interest-only mortgage, your monthly payments cover only the interest — not the principal. This results in lower monthly costs, but the original loan amount remains unchanged at the end of the term unless you repay it separately (for example, through savings, investments or by selling the property). Since 2013, new interest-only mortgages in the Netherlands are no longer eligible for mortgage interest tax deduction.",
+    "tags": ["interest-only", "aflossingsvrij", "products"]
+  },
+  {
+    "id": "p008",
+    "category": "products",
+    "question": "What is a bridging loan?",
+    "answer": "A bridging loan (overbruggingskrediet) is short-term financing that covers the gap when you purchase a new home before your current one has been sold. It lets you use the anticipated equity from your existing property, and is repaid once the sale completes. It typically carries higher interest and is time-limited, so it requires careful planning.",
+    "tags": ["bridging", "overbrugging", "products", "transition"]
+  },
+  {
+    "id": "p009",
+    "category": "products",
+    "question": "What are the benefits of an NHG-backed mortgage?",
+    "answer": "NHG-backed mortgages typically come with an interest rate discount of 0.3–0.6% compared to non-NHG mortgages of the same type. They also come with additional protection in specific hardship situations, such as unemployment or divorce, where NHG may cover any shortfall if the home has to be sold for less than the outstanding mortgage. The one-time NHG premium is currently 0.6% of the mortgage amount.",
+    "tags": ["nhg", "benefits", "rate discount", "products"]
+  },
+  {
+    "id": "p010",
+    "category": "products",
+    "question": "What is the maximum mortgage term in the Netherlands?",
+    "answer": "The standard maximum mortgage term is 30 years. This is also the maximum period over which you can claim mortgage interest deduction. Shorter terms (20 or 25 years) reduce total interest paid but increase monthly payments. Your advisor will help you identify the term that balances affordability with total cost.",
+    "tags": ["term", "maximum", "30 years", "products"]
+  },
+  {
+    "id": "pr001",
+    "category": "process",
+    "question": "What are the steps in a Dutch mortgage application?",
+    "answer": "A typical journey: (1) Start your application and complete your profile. (2) Upload required documents. (3) Silta's AI checks completeness and flags any issues. (4) Your mortgage advisor reviews the file and validates everything. (5) The advisor submits a request to the lender. (6) The lender issues a mortgage offer. (7) You and your advisor sign the offer. (8) The notary finalises the transfer on completion day.",
+    "tags": ["process", "steps", "application", "overview"]
+  },
+  {
+    "id": "pr002",
+    "category": "process",
+    "question": "What does Silta's AI document review check?",
+    "answer": "Silta checks that uploaded documents are the right type, recent enough, complete, and consistent with one another. It extracts key information — income, employer, savings — and flags anything that looks outdated, duplicated, incomplete or conflicting. This helps ensure your file is as strong as possible before your human advisor reviews it.",
+    "tags": ["ai review", "document check", "process"]
+  },
+  {
+    "id": "pr003",
+    "category": "process",
+    "question": "What happens during advisor review?",
+    "answer": "Your assigned mortgage advisor reviews your complete file — all documents, extracted information, your profile, and any AI-flagged issues. They validate the information, consider your personal circumstances, run affordability calculations, and prepare the formal advice and recommendation required before a lender offer can be requested. This is the step where the human expertise comes in.",
+    "tags": ["advisor review", "process", "validation"]
+  },
+  {
+    "id": "pr004",
+    "category": "process",
+    "question": "How long does the mortgage application process typically take?",
+    "answer": "Timelines vary significantly. With a complete, well-organised application, lenders typically issue an offer within 1–3 weeks of submission. The overall process from starting your application to receiving the keys can take 6–12 weeks, depending on how quickly documents are collected and whether any complications arise. Having a complete Silta readiness score before advisor review helps speed things up.",
+    "tags": ["timeline", "duration", "process", "how long"]
+  },
+  {
+    "id": "pr005",
+    "category": "process",
+    "question": "What happens after my advisor review is complete?",
+    "answer": "Once your advisor finishes their review and the recommendation is agreed, they submit a mortgage request to the selected lender. The lender performs their own verification, after which they issue a formal mortgage offer (hypotheekofferte). You review this with your advisor, and if you're happy, you sign and accept it.",
+    "tags": ["after review", "lender", "offer", "process"]
+  },
+  {
+    "id": "pr006",
+    "category": "process",
+    "question": "What is a valuation report and why is it needed?",
+    "answer": "A valuation report (taxatierapport) is an independent appraisal of the property's market value, carried out by a certified appraiser. Lenders require it to confirm the property is worth at least what you are paying. Without it, they cannot finalise the mortgage amount. Your advisor will typically arrange this as part of the process.",
+    "tags": ["valuation", "taxatie", "process", "appraisal"]
+  },
+  {
+    "id": "pr007",
+    "category": "process",
+    "question": "What does 'Ready for Advisor Review' mean in Silta?",
+    "answer": "This status means your readiness score is above 90%, all required documents have been uploaded, and no outstanding issues have been flagged. At this point your file is in good shape for your mortgage advisor to review and formally assess. It doesn't mean approval is guaranteed — it means your application is as complete as it can be at this stage.",
+    "tags": ["ready", "status", "process", "readiness"]
+  },
+  {
+    "id": "pr008",
+    "category": "process",
+    "question": "What is mortgage registration?",
+    "answer": "Mortgage registration is the formal process of recording the mortgage on the property in the Dutch land registry (Kadaster). The notary handles this on completion day. Once registered, the lender has a legal claim on the property as security for the loan. Registration costs are typically included in the closing costs.",
+    "tags": ["registration", "kadaster", "notary", "process"]
+  },
+  {
+    "id": "pr009",
+    "category": "process",
+    "question": "What are typical closing costs when buying a home?",
+    "answer": "Closing costs in the Netherlands typically include: transfer tax (overdrachtsbelasting, currently 2% for most buyers), notary fees, valuation report costs, NHG premium (if applicable), and mortgage advisor fees. First-time buyers under 35 purchasing a property under a set threshold may qualify for transfer tax exemption. Budget roughly 4–6% of the purchase price for total closing costs.",
+    "tags": ["closing costs", "overdrachtsbelasting", "fees", "process"]
+  },
+  {
+    "id": "pr010",
+    "category": "process",
+    "question": "What happens on completion day?",
+    "answer": "On completion day, you visit the notary's office. The notary confirms all legal documents are in order, you sign the mortgage deed and transfer deed, the lender releases the funds, and ownership formally transfers to you. The notary then registers the transfer with the Kadaster. After that, you collect the keys to your new home.",
+    "tags": ["completion", "signing", "keys", "process", "notary"]
+  },
+  {
+    "id": "d001",
+    "category": "documents",
+    "question": "Why do I need to upload salary slips?",
+    "answer": "Salary slips (loonstroken) verify your current gross and net income — one of the central factors in affordability assessment. Lenders require recent slips, typically covering the last 1–3 months, to confirm the income figure used is current. If your income has recently changed (for example, a pay rise or role change), more recent slips are especially important.",
+    "tags": ["salary slips", "loonstroken", "income", "documents"]
+  },
+  {
+    "id": "d002",
+    "category": "documents",
+    "question": "Why is an employment contract required?",
+    "answer": "An employment contract (arbeidsovereenkomst) confirms your employment type (permanent or temporary), your employer, and the agreed salary. It's used to verify stability and employment conditions — permanent contracts are generally viewed more favourably than temporary ones. If you're on a temporary contract, an employer declaration (werkgeversverklaring) is often needed as well.",
+    "tags": ["employment contract", "permanence", "documents"]
+  },
+  {
+    "id": "d003",
+    "category": "documents",
+    "question": "What bank statements are needed for a mortgage?",
+    "answer": "Lenders typically request 3 months of bank statements from your primary current account. These verify that your income deposits match your salary slips, show your regular spending pattern, and confirm you have no undisclosed regular obligations. Statements with unexplained large deposits or payments may require explanation.",
+    "tags": ["bank statements", "rekeningafschriften", "documents", "3 months"]
+  },
+  {
+    "id": "d004",
+    "category": "documents",
+    "question": "What is a savings statement and why is it required?",
+    "answer": "A savings statement (spaaroverzicht) shows your current savings balance and is used to verify that you have sufficient funds to cover the down payment (typically 10% of the purchase price) and closing costs. Lenders want to see that these funds have been in your account for a reasonable period — unusual large recent deposits may need explanation.",
+    "tags": ["savings", "spaaroverzicht", "documents", "down payment"]
+  },
+  {
+    "id": "d005",
+    "category": "documents",
+    "question": "What identification documents are accepted?",
+    "answer": "A valid passport (paspoort) or Dutch national identity card (identiteitskaart) is accepted. The document must be in date — expired identification will not be accepted. A driver's licence is generally not sufficient for mortgage applications. If you are not a Dutch national, additional documentation confirming your right to reside and work in the Netherlands may be needed.",
+    "tags": ["identity", "passport", "id card", "documents"]
+  },
+  {
+    "id": "d006",
+    "category": "documents",
+    "question": "What documents do self-employed applicants need?",
+    "answer": "Self-employed applicants (ZZP / eigen onderneming) cannot provide salary slips and employment contracts. Instead, lenders require: annual accounts (jaarrekeningen) for the past 2–3 years, recent tax assessments (belastingaanslagen), and often a current profit & loss statement. Income is typically averaged over the available years. Having an accountant prepare your accounts can significantly strengthen your application.",
+    "tags": ["self-employed", "zzp", "freelance", "annual accounts", "documents"]
+  },
+  {
+    "id": "d007",
+    "category": "documents",
+    "question": "Do I need to disclose student debt?",
+    "answer": "Yes. Student debt (studieschuld) from DUO — the Dutch student finance organisation — must be disclosed. It is factored into affordability calculations because it affects how much of your income is available for mortgage repayments. Even if repayments are currently suspended or small, the outstanding balance affects your borrowing capacity.",
+    "tags": ["student debt", "duo", "studieschuld", "documents"]
+  },
+  {
+    "id": "d008",
+    "category": "documents",
+    "question": "Do I need to disclose personal loans or credit cards?",
+    "answer": "Yes. All credit obligations — personal loans, car financing, revolving credit, buy-now-pay-later agreements, and outstanding credit card balances — must be disclosed. Lenders can cross-reference the BKR credit register, so undisclosed debt is likely to be discovered. Undisclosed obligations can result in a lower mortgage offer or even withdrawal.",
+    "tags": ["personal loans", "credit", "bkr", "debt", "documents"]
+  },
+  {
+    "id": "d009",
+    "category": "documents",
+    "question": "How recent must my documents be?",
+    "answer": "For most documents, the standard requirement is: salary slips — within the last 3 months; bank statements — the most recent 3 months; savings statement — within the last 30 days at time of mortgage offer; employment contract — current version; identification — in-date; tax returns and annual accounts (self-employed) — most recent 2–3 years. Outdated documents may delay your application.",
+    "tags": ["recency", "validity", "documents", "requirements"]
+  },
+  {
+    "id": "d010",
+    "category": "documents",
+    "question": "What if I have additional income sources such as freelance work?",
+    "answer": "Additional income (bijverdiensten) — such as freelance projects, rental income, or a second job — can often be considered, but requires supporting documentation: annual tax assessments, bank statements showing the income, and potentially a declaration from the client or rental agreement. Income that is irregular or recent may be partially weighted or excluded at the lender's discretion. Your advisor can advise on what is includable.",
+    "tags": ["additional income", "freelance", "side income", "documents"]
+  },
+  {
+    "id": "a001",
+    "category": "affordability",
+    "question": "How does my income affect how much I can borrow?",
+    "answer": "Income is the primary driver of borrowing capacity. Lenders apply income multiples — typically 4.0–5.5x gross annual income — as the starting point. However, the precise amount also depends on interest rates, employment type, existing debt, and the property value. A higher, stable, verifiable income supports a higher maximum loan amount.",
+    "tags": ["income", "borrowing capacity", "affordability", "multiples"]
+  },
+  {
+    "id": "a002",
+    "category": "affordability",
+    "question": "How do my savings affect my mortgage application?",
+    "answer": "Savings serve several purposes: covering the down payment (typically at least 10% of the purchase price), covering closing costs (roughly 4–6%), and providing a financial buffer that lenders view positively. In the Netherlands you can borrow up to 100% of the property value — meaning all purchase costs beyond the property price must be covered by savings.",
+    "tags": ["savings", "down payment", "affordability"]
+  },
+  {
+    "id": "a003",
+    "category": "affordability",
+    "question": "How does existing debt affect affordability?",
+    "answer": "All existing debt reduces your net borrowing capacity because it reduces the portion of your income available for mortgage repayments. BKR-registered credit, student debt, personal loans and car financing are all factored in. Even a modest monthly payment on an existing loan can meaningfully reduce the maximum mortgage you qualify for.",
+    "tags": ["debt", "bkr", "affordability", "reduction"]
+  },
+  {
+    "id": "a004",
+    "category": "affordability",
+    "question": "Why does employment stability matter to lenders?",
+    "answer": "A permanent contract (vast contract) gives lenders confidence that your income will continue. Temporary contracts, probationary periods, and freelance income can all result in the income being weighted lower or requiring an employer declaration of intent to renew. Stability of income over time — ideally 2+ years in the same role or industry — is viewed very positively.",
+    "tags": ["employment", "stability", "permanent", "affordability"]
+  },
+  {
+    "id": "a005",
+    "category": "affordability",
+    "question": "What if I am currently in a probationary period?",
+    "answer": "Being in a probationary period (proeftijd) can complicate a mortgage application, as lenders generally cannot count income from a role with uncertain continuation. However, if you have a signed permanent contract starting after your probation, some lenders will consider this. An employer statement confirming intention to continue employment can sometimes help. Your advisor can identify the most suitable lender for your situation.",
+    "tags": ["probationary", "temporary", "proeftijd", "affordability"]
+  },
+  {
+    "id": "a006",
+    "category": "affordability",
+    "question": "How does a partner's income factor into a mortgage application?",
+    "answer": "When applying jointly, both incomes are typically combined for affordability purposes, which usually significantly increases borrowing capacity. Both applicants must provide their own full set of documentation. The weaker applicant's income may be weighted differently, and both credit histories will be checked. Joint applications also mean both parties are jointly responsible for the mortgage.",
+    "tags": ["partner", "joint", "two incomes", "affordability"]
+  },
+  {
+    "id": "a007",
+    "category": "affordability",
+    "question": "What factors go into an affordability calculation?",
+    "answer": "Affordability calculations typically consider: gross annual income (individual or combined), existing monthly debt obligations, current interest rates, desired mortgage term, property value, LTV ratio, employment type, and lender-specific income multiples. The DTI (debt-to-income) ratio is a key metric. Your advisor runs these calculations using lender-specific tools and knowledge.",
+    "tags": ["affordability", "calculation", "dti", "ltv", "income multiples"]
+  },
+  {
+    "id": "a008",
+    "category": "affordability",
+    "question": "How does student debt affect borrowing capacity specifically?",
+    "answer": "DUO student debt is factored into affordability at 0.45% per month of the outstanding balance (as of current regulations). So a student debt of €30,000 reduces your notional monthly payments by €135, which is then deducted from your available income for mortgage purposes. This can reduce your maximum mortgage by €30,000–€60,000 depending on current interest rates.",
+    "tags": ["student debt", "duo", "affordability", "calculation", "impact"]
+  },
+  {
+    "id": "a009",
+    "category": "affordability",
+    "question": "What happens if my affordability situation looks borderline?",
+    "answer": "If your situation is on the edge, your advisor will look carefully at your complete financial picture and lender-specific criteria. Options might include: applying for a slightly lower loan amount, extending the mortgage term, reducing other debt before applying, using additional savings, or identifying lenders with slightly different criteria that may better suit your profile. This is exactly where human advisor expertise adds the most value.",
+    "tags": ["borderline", "affordability", "options", "advisor"]
+  },
+  {
+    "id": "a010",
+    "category": "affordability",
+    "question": "Can I borrow more than 100% of the property value?",
+    "answer": "No. Since 2018, Dutch regulations limit mortgage borrowing to 100% of the appraised property value (loan-to-value 100%). This means all purchase costs beyond the property price — transfer tax, notary fees, advisor fees, NHG premium — must come from your own savings. This is why verifiable savings are a critical part of every Dutch mortgage application.",
+    "tags": ["100 percent", "ltv", "regulations", "affordability", "limits"]
+  },
+  {
+    "id": "s001",
+    "category": "platform",
+    "question": "How does Silta's AI assistant work?",
+    "answer": "Silta's AI assistant combines three sources of context: a mortgage knowledge base with detailed FAQ content, your uploaded and verified documents (income, savings, employment data), and your profile information (target property, employment type, goals). Each answer is grounded in this real context. The AI is designed to educate and guide — your mortgage advisor handles the formal recommendation and final validation.",
+    "tags": ["silta", "ai", "how it works", "platform"]
+  },
+  {
+    "id": "s002",
+    "category": "platform",
+    "question": "What is the hybrid AI-human model?",
+    "answer": "Silta operates on a deliberate hybrid model. AI handles: answering questions, explaining concepts, checking document completeness, tracking readiness, and giving personalised guidance. Human advisors handle: formal mortgage advice, regulatory compliance, complex situations, lender relationships, and the final recommendation. Neither replaces the other — together they make the journey faster and clearer.",
+    "tags": ["hybrid", "ai-human", "model", "platform"]
+  },
+  {
+    "id": "s003",
+    "category": "platform",
+    "question": "Is my information secure in Silta?",
+    "answer": "Documents and profile information you provide in Silta are used only to support your mortgage application and to provide personalised AI guidance. Your data is reviewed by your assigned advisor as part of the formal process. In a production deployment, all data would be encrypted at rest and in transit, and handled in accordance with GDPR. For this MVP, data is handled locally in your session.",
+    "tags": ["security", "privacy", "gdpr", "data", "platform"]
+  },
+  {
+    "id": "s004",
+    "category": "platform",
+    "question": "Can Silta's AI approve my mortgage?",
+    "answer": "No. Silta's AI assistant cannot approve a mortgage, guarantee an outcome, or provide formal mortgage advice. It can provide guidance, explain concepts, and give grounded assessments based on your documents and profile — but all formal recommendations and approvals are made by your human mortgage advisor and the lender. The AI is a preparation and education tool, not a decision-making system.",
+    "tags": ["approval", "ai limits", "formal advice", "platform"]
+  },
+  {
+    "id": "s005",
+    "category": "platform",
+    "question": "When should I contact my mortgage advisor directly?",
+    "answer": "Contact your advisor when: you have a complex personal situation (divorce, self-employment, unusual income), you want a formal recommendation, you've received a mortgage offer to discuss, you have a deadline or time-sensitive purchase, or anything Silta flags as needing human review. Silta will also proactively suggest advisor contact when a question goes beyond what AI guidance can reliably cover.",
+    "tags": ["advisor", "contact", "when", "platform"]
+  },
+  {
+    "id": "s006",
+    "category": "platform",
+    "question": "What does my readiness score mean?",
+    "answer": "Your readiness score (0–100%) reflects how complete and issue-free your application currently is, based on your profile and uploaded documents. A higher score means your file is closer to being ready for advisor review. The score is calculated from profile completeness, verified documents, and the absence of flagged issues. It's a real-time indicator — it updates immediately when you upload or verify new documents.",
+    "tags": ["readiness score", "meaning", "platform", "calculation"]
+  },
+  {
+    "id": "s007",
+    "category": "platform",
+    "question": "What does a 'Needs Review' document status mean?",
+    "answer": "A 'Needs Review' status means Silta detected something that requires a closer look — typically a discrepancy between documents, such as differing income figures on a salary slip and employment contract. It doesn't automatically mean something is wrong, but your advisor will need to examine these documents before the file can progress. You can also contact your advisor to discuss the issue directly.",
+    "tags": ["needs review", "status", "discrepancy", "platform"]
+  },
+  {
+    "id": "s008",
+    "category": "platform",
+    "question": "What happens after I request advisor review?",
+    "answer": "Once you request advisor review, your assigned advisor — Eva van der Berg in this demo — is notified and will begin their formal review of your file. They may reach out for clarification, request additional documents, or schedule a call to discuss your situation. You'll receive updates as the review progresses. Silta continues to be available for guidance throughout.",
+    "tags": ["advisor review", "next steps", "platform", "process"]
+  },
+  {
+    "id": "s009",
+    "category": "platform",
+    "question": "Can I change my employment status from employed to self-employed?",
+    "answer": "Yes. You can update your employment status in your Profile at any time. Changing from employed to self-employed (or vice versa) immediately updates the required document list — self-employed customers need annual accounts, tax returns and business financials instead of salary slips and an employment contract. Any previously uploaded documents that are no longer relevant for your status are flagged accordingly.",
+    "tags": ["employment status", "self-employed", "change", "platform", "profile"]
+  },
+  {
+    "id": "s010",
+    "category": "platform",
+    "question": "Is Silta only available in the Netherlands?",
+    "answer": "This MVP focuses on the Dutch mortgage market — the knowledge base, document requirements, NHG references, and affordability calculations are all tailored to Dutch regulations. However, the underlying architecture (AI guidance + document handling + readiness tracking + hybrid model) is applicable to other markets. Expanding to Belgium, Germany or the UK would require localising the knowledge base and regulatory guidance.",
+    "tags": ["netherlands", "market", "international", "platform"]
+  }
+]

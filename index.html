@@ -1,0 +1,1918 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Silta — Your Mortgage Journey</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script>
+  if (window.pdfjsLib) {
+    window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+  }
+</script>
+<style>
+:root{
+  --navy-900:#0E2238; --navy-800:#15304D; --navy-700:#1C3D60; --navy-600:#28547F;
+  --blue-500:#4A7CA8; --blue-600:#3A6489; --blue-100:#E7F0F8;
+  --green-700:#256E4C; --green-600:#2F8F62; --green-500:#3FA876; --green-100:#E5F6ED;
+  --amber-600:#B9762A; --amber-100:#FBF0DF;
+  --red-600:#C0443F; --red-100:#FBE9E8;
+  --white:#FFFFFF;
+  --gray-50:#F6F8FA; --gray-100:#EEF1F5; --gray-200:#E2E7ED; --gray-300:#CBD3DC;
+  --gray-400:#A9B3BE; --gray-500:#8993A1; --gray-600:#5C6773; --gray-700:#414C58; --gray-800:#2A3441; --gray-900:#16202B;
+  --radius-sm:8px; --radius-md:12px; --radius-lg:18px; --radius-xl:22px;
+  --shadow-sm:0 1px 2px rgba(15,35,56,.07), 0 1px 1px rgba(15,35,56,.04);
+  --shadow-md:0 10px 28px rgba(15,35,56,.09);
+  --shadow-lg:0 20px 48px rgba(15,35,56,.14);
+  --font-display:'Manrope',sans-serif; --font-body:'Inter',sans-serif; --font-mono:'IBM Plex Mono',monospace;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  font-family:var(--font-body); color:var(--gray-900); background:var(--gray-50);
+  -webkit-font-smoothing:antialiased; font-size:14.5px; line-height:1.55;
+}
+button{font-family:inherit; cursor:pointer;}
+input,select,textarea{font-family:inherit; font-size:14px;}
+a{color:inherit;}
+::selection{background:var(--green-100); color:var(--navy-900);}
+.hidden{display:none !important;}
+.icon{display:inline-block; vertical-align:middle; line-height:0;}
+.icon svg{display:block;}
+
+/* ---------- App shell ---------- */
+#app{display:flex; min-height:100vh;}
+.sidebar{
+  width:248px; flex:0 0 248px; background:linear-gradient(180deg,var(--navy-900),var(--navy-800));
+  color:var(--white); display:flex; flex-direction:column; padding:24px 16px; position:sticky; top:0; height:100vh;
+}
+.brand{display:flex; align-items:center; gap:10px; padding:6px 8px 26px 8px;}
+.brand-mark{width:34px; height:34px; flex:0 0 34px;}
+.brand-word{font-family:var(--font-display); font-weight:800; font-size:19px; letter-spacing:.2px; color:var(--white);}
+.brand-sub{font-size:10.5px; color:var(--gray-400); letter-spacing:.4px; text-transform:uppercase; margin-top:1px;}
+
+.nav{display:flex; flex-direction:column; gap:3px; margin-top:6px;}
+.nav-item{
+  display:flex; align-items:center; gap:11px; padding:10px 12px; border-radius:10px; color:#C7D3E0;
+  font-weight:600; font-size:13.6px; border:none; background:transparent; text-align:left; width:100%; transition:background .15s,color .15s;
+}
+.nav-item .icon svg{stroke:#9DB0C4;}
+.nav-item:hover{background:rgba(255,255,255,.06); color:var(--white);}
+.nav-item.active{background:rgba(255,255,255,.12); color:var(--white);}
+.nav-item.active .icon svg{stroke:var(--green-500);}
+.nav-badge{margin-left:auto; background:var(--green-600); color:#fff; font-size:10px; font-weight:700; padding:2px 6px; border-radius:99px;}
+
+.sidebar-spacer{flex:1;}
+.hybrid-badge{
+  display:flex; align-items:flex-start; gap:9px; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.1);
+  border-radius:var(--radius-md); padding:13px 12px; margin-bottom:12px;
+}
+.hybrid-badge .icon svg{stroke:var(--green-500);}
+.hybrid-badge-title{font-size:12px; font-weight:700; color:var(--white);}
+.hybrid-badge-text{font-size:11px; color:var(--gray-400); margin-top:2px; line-height:1.4;}
+.sidebar-user{display:flex; align-items:center; gap:10px; padding:10px 8px; border-top:1px solid rgba(255,255,255,.08);}
+.avatar-sm{width:32px; height:32px; border-radius:50%; background:var(--green-600); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:12px; flex:0 0 32px;}
+.sidebar-user-name{font-size:12.5px; font-weight:600; color:var(--white);}
+.sidebar-user-sub{font-size:11px; color:var(--gray-400);}
+
+.main{flex:1; min-width:0; display:flex; flex-direction:column;}
+.topbar{
+  display:flex; align-items:center; justify-content:space-between; padding:18px 36px;
+  border-bottom:1px solid var(--gray-200); background:var(--white); position:sticky; top:0; z-index:20;
+}
+.topbar-title{font-family:var(--font-display); font-weight:800; font-size:21px; color:var(--navy-900);}
+.topbar-sub{font-size:12.5px; color:var(--gray-500); margin-top:2px;}
+.topbar-right{display:flex; align-items:center; gap:10px;}
+
+.content{padding:30px 36px 100px 36px; max-width:1180px; width:100%; margin:0 auto;}
+.page{width:100%;}
+
+/* ---------- Generic components ---------- */
+.grid{display:grid; gap:20px;}
+.grid-2{grid-template-columns:1.3fr 1fr;}
+.grid-3{grid-template-columns:repeat(3,1fr);}
+@media(max-width:980px){.grid-2,.grid-3{grid-template-columns:1fr;}}
+
+.card{background:var(--white); border:1px solid var(--gray-200); border-radius:var(--radius-lg); padding:22px; box-shadow:var(--shadow-sm);}
+.card-row{display:flex; align-items:center; justify-content:space-between; margin-bottom:14px;}
+.card-title{font-family:var(--font-display); font-weight:800; font-size:14.5px; color:var(--navy-900); letter-spacing:.1px; display:flex; align-items:center; gap:8px;}
+.card-title .icon svg{stroke:var(--blue-500);}
+.card-desc{font-size:12.5px; color:var(--gray-500);}
+
+.pill{display:inline-flex; align-items:center; gap:5px; font-size:11.5px; font-weight:700; padding:4px 10px; border-radius:99px; white-space:nowrap;}
+.pill-success{background:var(--green-100); color:var(--green-700);}
+.pill-warn{background:var(--amber-100); color:var(--amber-600);}
+.pill-danger{background:var(--red-100); color:var(--red-600);}
+.pill-info{background:var(--blue-100); color:var(--blue-600);}
+.pill-neutral{background:var(--gray-100); color:var(--gray-600);}
+.pill .icon svg{width:11px; height:11px;}
+
+.btn{display:inline-flex; align-items:center; gap:7px; border-radius:10px; padding:10px 16px; font-weight:700; font-size:13px; border:1px solid transparent; transition:all .15s;}
+.btn-primary{background:var(--navy-900); color:#fff;}
+.btn-primary:hover{background:var(--navy-800);}
+.btn-accent{background:var(--green-600); color:#fff;}
+.btn-accent:hover{background:var(--green-700);}
+.btn-outline{background:#fff; color:var(--navy-900); border-color:var(--gray-300);}
+.btn-outline:hover{border-color:var(--navy-700); background:var(--gray-50);}
+.btn-ghost{background:transparent; color:var(--gray-600); border-color:transparent;}
+.btn-ghost:hover{background:var(--gray-100); color:var(--gray-900);}
+.btn-sm{padding:7px 11px; font-size:12px; border-radius:8px;}
+.btn:disabled{opacity:.45; cursor:not-allowed;}
+.btn .icon svg{width:15px; height:15px;}
+
+.divider{height:1px; background:var(--gray-200); margin:16px 0;}
+.muted{color:var(--gray-500);}
+.mono{font-family:var(--font-mono);}
+.label-xs{font-size:10.5px; font-weight:700; text-transform:uppercase; letter-spacing:.5px; color:var(--gray-500);}
+
+/* readiness ring */
+.ring-wrap{position:relative; width:172px; height:172px; flex:0 0 172px;}
+.ring-wrap svg{transform:rotate(-90deg);}
+.ring-center{position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center;}
+.ring-pct{font-family:var(--font-display); font-weight:800; font-size:36px; color:var(--navy-900); line-height:1;}
+.ring-label{font-size:11px; color:var(--gray-500); margin-top:4px; text-align:center; max-width:110px;}
+
+/* progress steps */
+.steps{display:flex; flex-direction:column; gap:0;}
+.step{display:flex; gap:12px; position:relative; padding-bottom:22px;}
+.step:last-child{padding-bottom:0;}
+.step-line{position:absolute; left:11px; top:24px; bottom:0; width:2px; background:var(--gray-200);}
+.step:last-child .step-line{display:none;}
+.step.done .step-line{background:var(--green-500);}
+.step-dot{width:23px; height:23px; border-radius:50%; flex:0 0 23px; display:flex; align-items:center; justify-content:center; z-index:1; border:2px solid var(--gray-300); background:#fff;}
+.step.done .step-dot{background:var(--green-500); border-color:var(--green-500);}
+.step.current .step-dot{border-color:var(--blue-500); background:var(--blue-100);}
+.step-dot .icon svg{width:13px; height:13px; stroke:#fff;}
+.step-body{padding-top:1px;}
+.step-title{font-weight:700; font-size:13.5px; color:var(--gray-800);}
+.step.done .step-title{color:var(--navy-900);}
+.step-note{font-size:11.5px; color:var(--gray-500); margin-top:1px;}
+
+/* next steps */
+.next-steps-card{background:linear-gradient(135deg,var(--navy-900),var(--navy-700)); border-radius:var(--radius-xl); padding:24px; color:#fff; box-shadow:var(--shadow-md);}
+.next-steps-card .card-title{color:#fff; font-size:15px;}
+.next-steps-card .card-title .icon svg{stroke:var(--green-500);}
+.next-item{display:flex; align-items:flex-start; gap:12px; padding:12px 0; border-top:1px solid rgba(255,255,255,.1);}
+.next-item:first-of-type{border-top:none;}
+.next-num{width:24px; height:24px; border-radius:7px; background:rgba(255,255,255,.12); color:#fff; font-size:12px; font-weight:800; display:flex; align-items:center; justify-content:center; flex:0 0 24px; font-family:var(--font-mono);}
+.next-text{font-size:13.3px; font-weight:600; color:#EDF2F8;}
+.next-sub{font-size:11.5px; color:#B7C5D6; margin-top:2px;}
+.next-action{margin-left:auto; flex:0 0 auto;}
+
+/* doc list */
+.doc-cat-title{display:flex; align-items:center; gap:9px; margin:26px 0 12px 0;}
+.doc-cat-title:first-child{margin-top:0;}
+.doc-cat-title .icon svg{stroke:var(--navy-700);}
+.doc-cat-name{font-family:var(--font-display); font-weight:800; font-size:14px; color:var(--navy-900);}
+.doc-cat-meta{font-size:11.5px; color:var(--gray-500); margin-left:auto;}
+
+.doc-card{border:1px solid var(--gray-200); border-radius:var(--radius-md); padding:16px 18px; background:#fff; margin-bottom:12px;}
+.doc-card-top{display:flex; align-items:center; gap:12px;}
+.doc-icon{width:38px; height:38px; border-radius:10px; background:var(--blue-100); display:flex; align-items:center; justify-content:center; flex:0 0 38px;}
+.doc-icon svg{stroke:var(--blue-600);}
+.doc-name{font-weight:700; font-size:13.8px; color:var(--gray-900);}
+.doc-file{font-size:11.5px; color:var(--gray-500); margin-top:1px; font-family:var(--font-mono);}
+.doc-status{margin-left:auto;}
+.doc-actions{display:flex; gap:8px; align-items:center;}
+.doc-body{margin-top:13px;}
+.dropzone{
+  border:1.5px dashed var(--gray-300); border-radius:10px; padding:16px; display:flex; align-items:center; gap:12px;
+  background:var(--gray-50); cursor:pointer; transition:border-color .15s, background .15s;
+}
+.dropzone:hover{border-color:var(--blue-500); background:var(--blue-100);}
+.dropzone .icon svg{stroke:var(--blue-500);}
+.dropzone-text{font-size:12.6px; font-weight:600; color:var(--gray-700);}
+.dropzone-sub{font-size:11px; color:var(--gray-500);}
+.scenario-row{display:flex; align-items:center; gap:8px; margin-top:10px;}
+.scenario-row select{border:1px solid var(--gray-300); border-radius:7px; padding:5px 8px; font-size:11.5px; color:var(--gray-600); background:#fff;}
+.scenario-row label{font-size:11px; color:var(--gray-500);}
+
+.extract-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; margin-top:13px; padding-top:13px; border-top:1px dashed var(--gray-200);}
+.extract-item{}
+.extract-label{font-size:10.5px; color:var(--gray-500); text-transform:uppercase; letter-spacing:.4px; font-weight:700;}
+.extract-value{font-family:var(--font-mono); font-weight:600; font-size:14.5px; color:var(--navy-900); margin-top:2px;}
+
+.issue-banner{display:flex; gap:10px; align-items:flex-start; background:var(--amber-100); border:1px solid #F0DCB8; border-radius:9px; padding:11px 13px; margin-top:12px; font-size:12.4px; color:#7A4E15;}
+.issue-banner.danger{background:var(--red-100); border-color:#F0C9C7; color:#822B27;}
+.issue-banner .icon svg{stroke:#B9762A; flex:0 0 16px; margin-top:1px;}
+.issue-banner.danger .icon svg{stroke:#C0443F;}
+
+.analyzing-row{display:flex; align-items:center; gap:10px; padding:13px 0; font-size:12.6px; color:var(--blue-600); font-weight:600;}
+.spinner{width:15px; height:15px; border-radius:50%; border:2px solid var(--blue-100); border-top-color:var(--blue-500); animation:spin .7s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* checklist */
+.checklist-item{display:flex; align-items:center; gap:10px; padding:9px 0; border-bottom:1px solid var(--gray-100); font-size:13px;}
+.checklist-item:last-child{border-bottom:none;}
+.checklist-dot{width:18px; height:18px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex:0 0 18px;}
+.checklist-dot.ok{background:var(--green-500);}
+.checklist-dot.warn{background:var(--amber-600);}
+.checklist-dot .icon svg{width:11px; height:11px; stroke:#fff;}
+.checklist-text{font-weight:600; color:var(--gray-800);}
+.checklist-sub{margin-left:auto; font-size:11px; color:var(--gray-500);}
+
+/* insights */
+.insight-item{display:flex; gap:10px; padding:11px 0; border-bottom:1px solid var(--gray-100);}
+.insight-item:last-child{border-bottom:none;}
+.insight-dot{width:28px; height:28px; border-radius:8px; background:var(--green-100); display:flex; align-items:center; justify-content:center; flex:0 0 28px;}
+.insight-dot .icon svg{stroke:var(--green-600); width:14px; height:14px;}
+.insight-text{font-size:12.6px; color:var(--gray-800); line-height:1.45;}
+.insight-time{font-size:10.8px; color:var(--gray-400); margin-top:2px;}
+
+/* advisor card */
+.advisor-card{display:flex; gap:13px; align-items:flex-start;}
+.advisor-avatar{width:46px; height:46px; border-radius:50%; background:var(--navy-700); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:15px; flex:0 0 46px;}
+.advisor-name{font-weight:700; font-size:14px; color:var(--navy-900);}
+.advisor-role{font-size:11.5px; color:var(--gray-500);}
+.advisor-actions{display:flex; gap:8px; margin-top:11px; flex-wrap:wrap;}
+
+/* ---------- Chat / Assistant ---------- */
+.assistant-shell{display:grid; grid-template-columns:1fr 280px; gap:20px; height:calc(100vh - 175px); min-height:520px;}
+@media(max-width:980px){.assistant-shell{grid-template-columns:1fr; height:auto;}}
+.chat-panel{display:flex; flex-direction:column; background:#fff; border:1px solid var(--gray-200); border-radius:var(--radius-lg); box-shadow:var(--shadow-sm); overflow:hidden;}
+.chat-header{display:flex; align-items:center; gap:11px; padding:16px 20px; border-bottom:1px solid var(--gray-200);}
+.silta-mark{width:36px; height:36px; border-radius:10px; background:var(--navy-900); display:flex; align-items:center; justify-content:center; flex:0 0 36px;}
+.silta-mark svg{stroke:var(--green-500);}
+.chat-header-name{font-family:var(--font-display); font-weight:800; font-size:14.5px; color:var(--navy-900);}
+.chat-header-sub{font-size:11px; color:var(--green-600); font-weight:600; display:flex; align-items:center; gap:5px;}
+.chat-header-sub .dot{width:6px; height:6px; border-radius:50%; background:var(--green-500); display:inline-block;}
+.chat-header-actions{margin-left:auto; display:flex; gap:6px;}
+
+.chat-messages{flex:1; overflow-y:auto; padding:22px 22px 6px 22px; display:flex; flex-direction:column; gap:16px;}
+.msg-row{display:flex; gap:10px; max-width:86%;}
+.msg-row.user{align-self:flex-end; flex-direction:row-reverse;}
+.msg-row.assistant{align-self:flex-start;}
+.msg-avatar{width:28px; height:28px; border-radius:50%; flex:0 0 28px; display:flex; align-items:center; justify-content:center;}
+.msg-row.assistant .msg-avatar{background:var(--navy-900);}
+.msg-row.assistant .msg-avatar svg{stroke:var(--green-500); width:14px; height:14px;}
+.msg-row.user .msg-avatar{background:var(--blue-500); color:#fff; font-size:11px; font-weight:700;}
+.msg-col{display:flex; flex-direction:column; gap:4px;}
+.msg-row.user .msg-col{align-items:flex-end;}
+.bubble{padding:11px 14px; border-radius:14px; font-size:13.4px; line-height:1.55;}
+.msg-row.assistant .bubble{background:var(--gray-50); border:1px solid var(--gray-200); color:var(--gray-900); border-top-left-radius:4px;}
+.msg-row.assistant .bubble.proactive{background:var(--green-100); border-color:#CDEBDC;}
+.msg-row.user .bubble{background:var(--navy-900); color:#fff; border-top-right-radius:4px;}
+.msg-meta{display:flex; align-items:center; gap:8px; font-size:10.5px; color:var(--gray-400); padding:0 3px;}
+.msg-row.user .msg-meta{flex-direction:row-reverse;}
+.copy-btn{background:none; border:none; color:var(--gray-400); font-size:10.5px; display:flex; align-items:center; gap:3px; padding:2px;}
+.copy-btn:hover{color:var(--gray-700);}
+.copy-btn .icon svg{width:11px; height:11px;}
+.advisor-suggest{margin-top:7px;}
+.advisor-suggest button{font-size:11.5px;}
+
+.typing-row{align-self:flex-start; display:flex; gap:10px;}
+.typing-bubble{background:var(--gray-50); border:1px solid var(--gray-200); border-radius:14px; border-top-left-radius:4px; padding:13px 16px; display:flex; gap:4px;}
+.typing-bubble span{width:6px; height:6px; border-radius:50%; background:var(--gray-400); display:inline-block; animation:bounce 1.2s infinite;}
+.typing-bubble span:nth-child(2){animation-delay:.15s;} .typing-bubble span:nth-child(3){animation-delay:.3s;}
+@keyframes bounce{0%,60%,100%{transform:translateY(0); opacity:.5;} 30%{transform:translateY(-4px); opacity:1;}}
+
+.suggest-row{display:flex; gap:8px; flex-wrap:wrap; padding:4px 22px 16px 22px;}
+.chip{background:#fff; border:1px solid var(--gray-300); color:var(--navy-800); font-size:12px; font-weight:600; padding:7px 12px; border-radius:99px; transition:all .15s;}
+.chip:hover{border-color:var(--blue-500); background:var(--blue-100);}
+
+.chat-input-bar{display:flex; gap:10px; align-items:flex-end; padding:14px 18px; border-top:1px solid var(--gray-200); background:#fff;}
+.chat-input-bar textarea{
+  flex:1; resize:none; border:1px solid var(--gray-300); border-radius:12px; padding:11px 14px; font-size:13.6px; max-height:120px;
+  outline:none; transition:border-color .15s;
+}
+.chat-input-bar textarea:focus{border-color:var(--blue-500);}
+.send-btn{width:42px; height:42px; border-radius:11px; background:var(--navy-900); border:none; color:#fff; display:flex; align-items:center; justify-content:center; flex:0 0 42px;}
+.send-btn:hover{background:var(--navy-800);}
+.send-btn:disabled{opacity:.4;}
+.send-btn .icon svg{stroke:#fff; width:17px; height:17px;}
+
+.context-panel{display:flex; flex-direction:column; gap:14px; overflow-y:auto;}
+.ctx-card{background:#fff; border:1px solid var(--gray-200); border-radius:var(--radius-md); padding:16px;}
+.ctx-title{font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.4px; color:var(--gray-500); margin-bottom:10px;}
+.ctx-row{display:flex; justify-content:space-between; font-size:12.4px; padding:5px 0; border-bottom:1px solid var(--gray-100);}
+.ctx-row:last-child{border-bottom:none;}
+.ctx-row span:first-child{color:var(--gray-500);}
+.ctx-row span:last-child{font-weight:700; color:var(--gray-900); font-family:var(--font-mono);}
+
+/* ---------- Forms (Profile) ---------- */
+.form-section{margin-bottom:8px;}
+.form-section-title{font-family:var(--font-display); font-weight:800; font-size:14.5px; color:var(--navy-900); margin-bottom:3px; display:flex; align-items:center; gap:8px;}
+.form-section-title .icon svg{stroke:var(--blue-500);}
+.form-section-desc{font-size:12px; color:var(--gray-500); margin-bottom:14px;}
+.form-grid{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+@media(max-width:700px){.form-grid{grid-template-columns:1fr;}}
+.field{display:flex; flex-direction:column; gap:5px;}
+.field label{font-size:12px; font-weight:700; color:var(--gray-700);}
+.field input, .field select{
+  border:1px solid var(--gray-300); border-radius:9px; padding:10px 12px; font-size:13.4px; outline:none; background:#fff; color:var(--gray-900);
+  transition:border-color .15s;
+}
+.field input:focus, .field select:focus{border-color:var(--blue-500);}
+.field-span2{grid-column:span 2;}
+@media(max-width:700px){.field-span2{grid-column:span 1;}}
+
+/* toast */
+#toastContainer{position:fixed; bottom:26px; left:50%; transform:translateX(-50%); z-index:200; display:flex; flex-direction:column; gap:8px; align-items:center;}
+.toast{background:var(--navy-900); color:#fff; padding:11px 18px; border-radius:10px; font-size:12.8px; font-weight:600; box-shadow:var(--shadow-lg); display:flex; align-items:center; gap:8px; animation:toastIn .2s ease;}
+.toast .icon svg{stroke:var(--green-500); width:15px; height:15px;}
+@keyframes toastIn{from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:translateY(0);}}
+
+/* floating assistant button */
+.fab{
+  position:fixed; bottom:26px; right:30px; width:58px; height:58px; border-radius:50%; background:var(--navy-900);
+  display:flex; align-items:center; justify-content:center; border:none; box-shadow:var(--shadow-lg); z-index:150; transition:transform .15s;
+}
+.fab:hover{transform:translateY(-2px) scale(1.03);}
+.fab .icon svg{stroke:var(--green-500); width:24px; height:24px;}
+.fab-dot{position:absolute; top:9px; right:9px; width:10px; height:10px; border-radius:50%; background:var(--green-500); border:2px solid var(--navy-900);}
+
+/* modal */
+.modal-overlay{position:fixed; inset:0; background:rgba(14,34,56,.45); display:flex; align-items:center; justify-content:center; z-index:300; padding:20px;}
+.modal{background:#fff; border-radius:var(--radius-lg); padding:24px; width:100%; max-width:440px; box-shadow:var(--shadow-lg);}
+.modal-title{font-family:var(--font-display); font-weight:800; font-size:16px; color:var(--navy-900); display:flex; align-items:center; gap:9px;}
+.modal-sub{font-size:12.4px; color:var(--gray-500); margin-top:4px; margin-bottom:16px;}
+.modal textarea{width:100%; border:1px solid var(--gray-300); border-radius:10px; padding:11px 13px; font-size:13.4px; resize:vertical; min-height:90px; outline:none;}
+.modal textarea:focus{border-color:var(--blue-500);}
+.modal-actions{display:flex; gap:9px; margin-top:16px; flex-wrap:wrap;}
+.modal-close{position:absolute; top:16px; right:16px;}
+
+@media(max-width:760px){
+  .sidebar{display:none;}
+  .content{padding:20px 16px 90px 16px;}
+  .topbar{padding:14px 18px;}
+}
+</style>
+</head>
+<body>
+
+<div id="app">
+  <aside class="sidebar">
+    <div class="brand">
+      <span class="brand-mark" id="brandMark"></span>
+      <div>
+        <div class="brand-word">Silta</div>
+        <div class="brand-sub">Mortgage Journey</div>
+      </div>
+    </div>
+    <nav class="nav" id="sidebarNav"></nav>
+    <div class="sidebar-spacer"></div>
+    <div class="hybrid-badge">
+      <span class="icon" id="hybridIcon"></span>
+      <div>
+        <div class="hybrid-badge-title">AI + Human Hybrid</div>
+        <div class="hybrid-badge-text">Silta's AI guides your journey. Your advisor validates and signs off on everything that matters.</div>
+      </div>
+    </div>
+    <div class="sidebar-user">
+      <div class="avatar-sm" id="sidebarUserAvatar">—</div>
+      <div>
+        <div class="sidebar-user-name" id="sidebarUserName">Welcome</div>
+        <div class="sidebar-user-sub">Customer</div>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div>
+        <div class="topbar-title" id="topbarTitle">Dashboard</div>
+        <div class="topbar-sub" id="topbarSub">Your mortgage application, at a glance</div>
+      </div>
+      <div class="topbar-right">
+        <span class="pill pill-info" id="topbarReadinessPill">Readiness 0%</span>
+        <button class="btn btn-outline btn-sm" onclick="openAdvisorModal()">Contact advisor</button>
+      </div>
+    </header>
+
+    <div class="content">
+      <div id="page-dashboard" class="page"></div>
+      <div id="page-documents" class="page hidden"></div>
+      <div id="page-assistant" class="page hidden"></div>
+      <div id="page-profile" class="page hidden"></div>
+    </div>
+  </main>
+</div>
+
+<button class="fab" id="fabBtn" onclick="navigate('assistant')" title="Ask Silta">
+  <span class="icon" id="fabIcon"></span>
+  <span class="fab-dot" id="fabDot"></span>
+</button>
+
+<div id="toastContainer"></div>
+<div id="modalRoot"></div>
+
+<script>
+/* =========================================================================
+   ICONS — minimal hand-drawn line icon set (no external icon library)
+   ========================================================================= */
+function ic(name, size){
+  size = size || 18;
+  const s = 'width="'+size+'" height="'+size+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"';
+  const paths = {
+    home:'<path d="M4 11.2 12 4l8 7.2"/><path d="M6.5 9.8V20h11V9.8"/><path d="M10 20v-6h4v6"/>',
+    folder:'<path d="M3 7.5h6l2 2h10v9.5a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1Z"/>',
+    chat:'<path d="M4 5.5h16a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H9l-4 3.5v-3.5H4a1 1 0 0 1-1-1v-9a1 1 0 0 1 1-1Z"/>',
+    user:'<circle cx="12" cy="8.3" r="3.3"/><path d="M5 20c.8-3.8 3.6-5.8 7-5.8s6.2 2 7 5.8"/>',
+    upload:'<path d="M7.5 17.5h9a3.5 3.5 0 0 0 .6-6.95A5 5 0 0 0 7.2 9.3 4 4 0 0 0 7.5 17.5Z"/><path d="M12 14V8m0 0-2.3 2.3M12 8l2.3 2.3"/>',
+    check:'<circle cx="12" cy="12" r="9"/><path d="M8 12.3 10.6 15 16 9"/>',
+    checkSm:'<path d="M5 12.3 9 16 19 6"/>',
+    alert:'<path d="M10.3 4.5 2.9 17.8a1.3 1.3 0 0 0 1.1 2h16a1.3 1.3 0 0 0 1.1-2L13.7 4.5a1.3 1.3 0 0 0-2.4 0Z"/><path d="M12 10v4"/><circle cx="12" cy="16.8" r="0.4" fill="currentColor"/>',
+    send:'<path d="M21 3 11 13"/><path d="M21 3 14.5 21l-3.5-8L3 9Z"/>',
+    copy:'<rect x="8.5" y="8.5" width="11" height="11" rx="2"/><path d="M5.5 15.5h-1a2 2 0 0 1-2-2v-9a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>',
+    phone:'<path d="M6 3.5h3l1.5 4-2 1.6a12 12 0 0 0 5.4 5.4l1.6-2 4 1.5v3a1.7 1.7 0 0 1-1.85 1.7A16 16 0 0 1 4.3 5.35 1.7 1.7 0 0 1 6 3.5Z"/>',
+    x:'<path d="M6 6l12 12M18 6 6 18"/>',
+    chevron:'<path d="M9 5l7 7-7 7"/>',
+    file:'<path d="M7 3.5h7l4 4v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1v-16a1 1 0 0 1 1-1Z"/><path d="M14 3.5V8h4"/><path d="M9 13h6M9 16.5h6"/>',
+    shield:'<path d="M12 3.5 19.5 6.5v5.2c0 5-3.2 8.2-7.5 9.8-4.3-1.6-7.5-4.8-7.5-9.8V6.5Z"/><path d="M9 12l2.2 2.2L15.5 9.7"/>',
+    sparkle:'<path d="M12 3.5c.4 2.7 1.3 4.4 2.5 5.6 1.2 1.2 2.9 2.1 5.6 2.5-2.7.4-4.4 1.3-5.6 2.5-1.2 1.2-2.1 2.9-2.5 5.6-.4-2.7-1.3-4.4-2.5-5.6-1.2-1.2-2.9-2.1-5.6-2.5 2.7-.4 4.4-1.3 5.6-2.5 1.2-1.2 2.1-2.9 2.5-5.6Z"/>',
+    bridge:'<path d="M3 16.5c2-3 4-4.5 9-4.5s7 1.5 9 4.5"/><path d="M5.5 16.5V12M9 16.5v-6M12 16.5V9M15 16.5v-6M18.5 16.5V12"/><path d="M3 19h18"/>',
+    target:'<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="0.6" fill="currentColor"/>',
+    trend:'<path d="M3.5 16 9 10.2l4 3.6 7-7.8"/><path d="M16.5 6h4v4"/>',
+    clock:'<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/>',
+    plus:'<path d="M12 5v14M5 12h14"/>',
+    refresh:'<path d="M4 12a8 8 0 0 1 13.6-5.7L20 8.5"/><path d="M20 4v4.5h-4.5"/><path d="M20 12a8 8 0 0 1-13.6 5.7L4 15.5"/><path d="M4 20v-4.5h4.5"/>',
+    building:'<path d="M5 20.5V5.5a1 1 0 0 1 1-1h6.5a1 1 0 0 1 1 1v15"/><path d="M13.5 11h4.5a1 1 0 0 1 1 1v8.5"/><path d="M8 8.5h1.5M8 12h1.5M8 15.5h1.5M14.5 14h1.5M14.5 17h1.5"/><path d="M3 20.5h18"/>',
+    msgcircle:'<circle cx="12" cy="12" r="9"/><path d="M8 11h8M8 14.5h5"/>'
+  };
+  return '<span class="icon"><svg '+s+'>'+(paths[name]||'')+'</svg></span>';
+}
+
+/* =========================================================================
+   KNOWLEDGE BASE — 50+ structured mortgage FAQ entries (used for retrieval)
+   ========================================================================= */
+const KB = [
+{c:'basics', q:'What is a mortgage?', a:'A mortgage is a loan used to purchase a property, where the property itself serves as collateral for the lender. You repay the loan over an agreed term, typically 20 to 30 years, through monthly instalments that include interest and, depending on the mortgage type, repayment of the principal.', t:['mortgage','basics','definition']},
+{c:'basics', q:'What do key mortgage terms like principal, interest and term mean?', a:'The principal is the amount you borrow. Interest is the cost charged by the lender for borrowing that amount. The term is the agreed duration of the loan, and the interest rate period is how long your interest rate stays fixed before it can change.', t:['terminology','principal','interest','term']},
+{c:'basics', q:'What is NHG (Nationale Hypotheek Garantie)?', a:'NHG is a Dutch national mortgage guarantee scheme available for mortgages up to a set value limit. It can offer more favourable interest rates and added protection in specific circumstances, such as job loss or relationship breakdown, subject to its own conditions.', t:['nhg','guarantee','basics']},
+{c:'basics', q:'What does loan-to-value (LTV) mean?', a:'Loan-to-value compares the mortgage amount to the value of the property. A lower LTV generally means you are borrowing a smaller proportion of the property value, which can affect the interest rate offered and the overall risk profile of the loan.', t:['ltv','loan-to-value','basics']},
+{c:'basics', q:'Should I rent or buy a home?', a:'This depends on your financial stability, how long you plan to stay in one place, current savings, and local market conditions. Silta can help you understand the mortgage side of buying, but this is a personal decision your advisor can help you think through in detail.', t:['rent','buy','basics']},
+{c:'basics', q:'What does a mortgage advisor do?', a:'A mortgage advisor reviews your complete financial situation, validates the information gathered during your application, explains your options in detail, and provides the final recommendation and formal advice required before a mortgage offer is issued.', t:['advisor','role','basics']},
+{c:'basics', q:'What is a mortgage offer (hypotheekofferte)?', a:'A mortgage offer is a formal, binding proposal from a lender that sets out the loan amount, interest rate, term and conditions. It is issued after your application, documents and advisor review have been completed.', t:['offer','basics']},
+{c:'basics', q:'What is the difference between gross and net monthly mortgage cost?', a:'The gross monthly cost is your mortgage payment before any tax relief is applied. The net monthly cost reflects what you actually pay after applicable tax benefits, such as mortgage interest deduction, are taken into account.', t:['gross','net','cost','basics']},
+
+{c:'products', q:'What is an annuity mortgage?', a:'An annuity mortgage keeps your gross monthly payment relatively stable throughout the term. In the early years, a larger portion of the payment covers interest, and over time, a larger portion goes toward repaying the principal.', t:['annuity','products']},
+{c:'products', q:'What is a linear mortgage?', a:'A linear mortgage repays the same amount of principal every month, so the loan balance decreases steadily. Because interest is calculated on a shrinking balance, monthly payments start higher and gradually decrease over the term.', t:['linear','products']},
+{c:'products', q:'What is an interest-only mortgage?', a:'With an interest-only mortgage, your monthly payments cover only the interest, not the principal. This typically results in lower monthly costs, but the original loan amount remains unchanged unless repaid separately or at the end of the term.', t:['interest-only','products']},
+{c:'products', q:'What is a fixed interest rate period?', a:'A fixed interest rate period locks in your interest rate for an agreed number of years, giving you predictable monthly payments during that period regardless of how market rates move.', t:['fixed','rate','products']},
+{c:'products', q:'What is a variable interest rate?', a:'A variable interest rate can move up or down in line with market conditions, which means your monthly payments may change over time. It can offer flexibility but carries more uncertainty than a fixed rate.', t:['variable','rate','products']},
+{c:'products', q:'Can I combine different mortgage types?', a:'Yes, many lenders allow a mortgage to be split into separate parts, each with a different structure or interest rate period. This can help balance predictability with flexibility, and your advisor can help assess whether this suits your situation.', t:['combine','products']},
+{c:'products', q:'What is a bridging loan (overbruggingskrediet)?', a:'A bridging loan is short-term financing that helps cover the gap when you purchase a new home before your current one has been sold, using the expected equity from your existing property.', t:['bridging','products']},
+{c:'products', q:'What are the benefits of an NHG-backed mortgage?', a:'NHG-backed mortgages can come with a reduced interest rate compared to non-NHG mortgages of the same type, along with additional safeguards in specific situations, subject to the scheme rules and value limits.', t:['nhg','products','benefits']},
+
+{c:'process', q:'What are the steps in a mortgage application?', a:'A typical journey includes starting your application, uploading the required documents, completing AI-assisted review and completeness checks, advisor review and validation, and finally receiving a formal mortgage offer.', t:['process','steps','application']},
+{c:'process', q:'How does document verification work?', a:'Each uploaded document is checked for relevance, completeness, and validity period. Silta highlights anything that looks missing, outdated, duplicated, or unclear, so it can be corrected before your advisor reviews your file.', t:['verification','documents','process']},
+{c:'process', q:'What does the AI review check?', a:'The AI review checks that your uploaded documents are the right type, recent enough, complete, and consistent with each other. It also extracts key details like income and savings to help track your application readiness.', t:['ai review','process']},
+{c:'process', q:'What happens during advisor review?', a:'Your assigned mortgage advisor reviews your complete file, validates the information gathered, considers your personal circumstances, and prepares the formal advice and recommendation required before an offer can be made.', t:['advisor review','process']},
+{c:'process', q:'What happens after advisor review?', a:'Once your advisor has completed their review and the recommendation is finalised, your file proceeds toward a formal mortgage offer from the lender, which you can then review and accept.', t:['after review','process']},
+{c:'process', q:'What is involved in receiving a final mortgage offer?', a:'A final mortgage offer is issued by the lender once your advisor has completed their review. It sets out the agreed loan amount, rate, and conditions, and is a formal step outside of Silta\'s AI-assisted guidance.', t:['final offer','process']},
+{c:'process', q:'What role does a notary play?', a:'A notary handles the legal transfer of property ownership and registers the mortgage. They finalise the transaction after your mortgage offer has been accepted.', t:['notary','process']},
+{c:'process', q:'How long does the mortgage process typically take?', a:'Timelines vary based on document readiness and individual circumstances, but having a complete, verified application before advisor review generally helps the process move more smoothly.', t:['timeline','process']},
+
+{c:'documents', q:'Why do I need to upload salary slips?', a:'Salary slips help verify your current income, which is one of the central factors used to assess affordability. Recent salary slips are required so the figures reflect your current financial situation.', t:['salary slips','documents']},
+{c:'documents', q:'Why is an employment contract required?', a:'An employment contract confirms your employment type and stability, such as whether you have a permanent or temporary contract, which affects how your income is assessed.', t:['employment contract','documents']},
+{c:'documents', q:'What bank statements are needed?', a:'Lenders typically request recent bank statements, usually covering the last few months, to verify your account activity, income deposits, and overall financial behaviour.', t:['bank statements','documents']},
+{c:'documents', q:'What is a savings statement and why is it required?', a:'A savings statement shows your current savings balance and is used to confirm you have sufficient funds for costs such as the down payment or other purchase-related expenses.', t:['savings','documents']},
+{c:'documents', q:'What identification documents are accepted?', a:'A valid passport or national ID card is accepted to confirm your identity as part of the application process.', t:['identity','id','documents']},
+{c:'documents', q:'What documents do self-employed applicants need?', a:'Self-employed applicants are typically asked for annual accounts, recent tax returns, and business financial statements instead of salary slips and an employment contract, since these better reflect business income.', t:['self-employed','documents']},
+{c:'documents', q:'Do I need to report student debt?', a:'Yes, student debt should be reported, as it is generally factored into affordability calculations even if monthly repayments are currently low or deferred.', t:['student debt','documents']},
+{c:'documents', q:'Do I need to report personal loans?', a:'Yes, any outstanding personal loans or other credit obligations should be reported, as they affect your overall debt position and borrowing capacity.', t:['personal loans','documents']},
+{c:'documents', q:'How recent do my documents need to be?', a:'Most income-related documents, such as salary slips, need to fall within a standard recent verification period, generally the last one to three months, to be considered current.', t:['validity','recent','documents']},
+{c:'documents', q:'What if I have additional income sources?', a:'Additional income, such as bonuses, freelance work, or rental income, can usually be considered, but generally needs separate supporting documentation and is reviewed individually by your advisor.', t:['additional income','documents']},
+
+{c:'affordability', q:'How does income affect how much I can borrow?', a:'Your income is one of the main factors used to estimate borrowing capacity. Generally, stable and verifiable income supports a higher maximum loan amount, within lender affordability guidelines.', t:['income','affordability']},
+{c:'affordability', q:'How do savings affect my mortgage application?', a:'Savings are typically used to cover the down payment and purchase-related costs. Having sufficient verified savings can strengthen your overall application.', t:['savings','affordability']},
+{c:'affordability', q:'How does existing debt affect affordability?', a:'Existing debt, such as student loans or personal loans, is factored into affordability calculations because it affects how much of your income is available for mortgage repayments.', t:['debt','affordability']},
+{c:'affordability', q:'Why does employment stability matter?', a:'Stable employment, particularly a permanent contract, generally provides more confidence in continued income, which lenders consider when assessing affordability.', t:['employment stability','affordability']},
+{c:'affordability', q:'What if I have a temporary employment contract?', a:'A temporary contract can still be considered, especially with a relevant employer statement confirming continuation, but it may be reviewed more closely by your advisor as part of the affordability assessment.', t:['temporary contract','affordability']},
+{c:'affordability', q:'How does a partner\'s income factor in?', a:'If you are applying together, both incomes are typically combined for affordability purposes, subject to each applicant\'s documentation being verified.', t:['partner','joint income','affordability']},
+{c:'affordability', q:'What factors go into an affordability calculation?', a:'Affordability generally considers income, existing debt, savings, employment stability, the property value, and current lending standards. Your advisor reviews these together to form a complete picture.', t:['affordability','calculation']},
+{c:'affordability', q:'How does student debt affect borrowing capacity?', a:'Student debt is factored into affordability calculations, generally reducing the amount you can borrow somewhat, even when current repayments are low.', t:['student debt','affordability']},
+{c:'affordability', q:'What happens if my affordability looks borderline?', a:'If your situation is borderline, your advisor will look closely at your complete financial picture, and may discuss adjustments such as a different mortgage type, additional savings, or a revised property budget.', t:['borderline','affordability']},
+{c:'affordability', q:'How does my advisor refine the affordability assessment?', a:'Your advisor reviews verified documents, your full financial picture, and lender criteria together, going beyond the indicative information Silta\'s AI can provide, to reach a formal recommendation.', t:['advisor','affordability']},
+
+{c:'platform', q:'How does Silta\'s AI assistant work?', a:'Silta\'s assistant combines a mortgage knowledge base, your uploaded documents, your profile information, and your conversation history to give grounded, personalised guidance, while leaving final decisions to your mortgage advisor.', t:['silta','ai','platform']},
+{c:'platform', q:'What is the hybrid AI-human model?', a:'Silta uses AI to handle guidance, education, document checks, and readiness tracking, while your human mortgage advisor remains responsible for final review, validation, and any formal mortgage recommendation.', t:['hybrid','platform']},
+{c:'platform', q:'Is my document data kept secure?', a:'Documents you upload are used only to support your mortgage application and readiness tracking within Silta, and are reviewed by your advisor as part of the formal process.', t:['security','privacy','platform']},
+{c:'platform', q:'Can the AI approve my mortgage?', a:'No. Silta\'s AI assistant cannot approve a mortgage or guarantee a specific outcome. It provides guidance based on the information currently available, and your advisor handles final review and approval-related decisions.', t:['approval','ai limits','platform']},
+{c:'platform', q:'When should I contact my mortgage advisor directly?', a:'It is a good idea to contact your advisor directly for complex personal circumstances, final decisions, or anything Silta suggests may need personalised advice beyond general guidance.', t:['advisor','contact','platform']},
+{c:'platform', q:'What does my readiness score mean?', a:'Your readiness score reflects how complete and verified your application currently is, based on your profile and uploaded documents. A higher score means your file is closer to being ready for advisor review.', t:['readiness score','platform']}
+];
+
+/* =========================================================================
+   DOCUMENT TYPE METADATA
+   ========================================================================= */
+const DOC_META = {
+  salary_slips:{label:'Salary Slips', category:'employment', weight:20, required:true, appliesTo:'employed', desc:'Last 3 months, showing gross and net pay.'},
+  employment_contract:{label:'Employment Contract', category:'employment', weight:20, required:true, appliesTo:'employed', desc:'Current signed employment agreement.'},
+  annual_accounts:{label:'Annual Accounts', category:'employment', weight:10, required:true, appliesTo:'self_employed', desc:'Last 2 years of annual business accounts.'},
+  tax_returns:{label:'Tax Returns', category:'employment', weight:10, required:true, appliesTo:'self_employed', desc:'Last 2 years of personal tax returns.'},
+  business_financials:{label:'Business Financial Statements', category:'employment', weight:20, required:true, appliesTo:'self_employed', desc:'Recent profit & loss and balance sheet.'},
+  bank_statements:{label:'Bank Statements', category:'financial', weight:20, required:true, desc:'Last 3 months of your primary current account.'},
+  savings_statement:{label:'Savings Statement', category:'financial', weight:10, required:true, desc:'Most recent savings account balance.'},
+  student_debt:{label:'Student Debt Statement', category:'debt', weight:0, required:false, desc:'DUO or equivalent student loan overview, if applicable.'},
+  personal_loans:{label:'Personal Loan Statement', category:'debt', weight:0, required:false, desc:'Overview of any outstanding personal loans, if applicable.'},
+  identity_document:{label:'Passport or ID Card', category:'identity', weight:10, required:true, desc:'A valid, in-date passport or national ID card.'}
+};
+const CATEGORY_META = {
+  employment:{name:'Employment', icon:'building'},
+  financial:{name:'Financial', icon:'trend'},
+  debt:{name:'Debt', icon:'file'},
+  identity:{name:'Identity', icon:'shield'}
+};
+const STATUS_META = {
+  missing:{label:'Missing', pill:'pill-neutral', icon:null},
+  analyzing:{label:'Analyzing…', pill:'pill-info', icon:null},
+  verified:{label:'Verified', pill:'pill-success', icon:'checkSm'},
+  outdated:{label:'Outdated', pill:'pill-warn', icon:'alert'},
+  duplicate:{label:'Duplicate', pill:'pill-warn', icon:'alert'},
+  incomplete:{label:'Incomplete', pill:'pill-warn', icon:'alert'},
+  unreadable:{label:'Unreadable', pill:'pill-danger', icon:'alert'},
+  needs_review:{label:'Needs Review', pill:'pill-warn', icon:'alert'},
+  wrong:{label:'Not Relevant', pill:'pill-danger', icon:'alert'},
+  unsupported:{label:'Unsupported Format', pill:'pill-danger', icon:'alert'}
+};
+const ISSUE_STATUSES = ['outdated','duplicate','incomplete','unreadable','needs_review','wrong','unsupported'];
+
+/* =========================================================================
+   STATE
+   ========================================================================= */
+const state = {
+  page:'dashboard',
+  profile:{
+    firstName:'', lastName:'', email:'', phone:'', dob:'',
+    employmentStatus:'employed', employer:'', jobTitle:'', employmentDuration:'',
+    targetPropertyValue:'', desiredMonthlyPayment:'', housingType:'', moveInTimeframe:'', city:''
+  },
+  documents:{},
+  insights:[],
+  conversation:[],
+  advisor:{name:'Eva van der Berg', title:'Senior Mortgage Advisor', initials:'EB', email:'eva.vandenberg@silta-demo.nl', phone:'+31 6 1234 5678'},
+  advisorMessages:[],
+  advisorReviewRequested:false,
+  apiKey:'',
+  aiModel:'gpt-4o-mini',
+  suggestions:["What's the difference between annuity and linear mortgages?","What documents am I still missing?","What does my readiness score mean?","Can I afford a €350,000 home?"]
+};
+Object.keys(DOC_META).forEach(id=>{ state.documents[id] = {status:'missing', fileName:null, fileSize:0, extracted:{}, note:null, files:[]}; });
+
+function uid(){ return 'id'+Math.random().toString(36).slice(2,10)+Date.now().toString(36); }
+function fmtMoney(n){ if(n===null||n===undefined||n==='') return '—'; return '€'+Number(n).toLocaleString('en-US'); }
+function fmtTime(d){ return new Date(d).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}); }
+function fmtTimeAgo(d){
+  const diff = Math.floor((Date.now()-new Date(d).getTime())/1000);
+  if(diff<60) return 'Just now';
+  if(diff<3600) return Math.floor(diff/60)+'m ago';
+  if(diff<86400) return Math.floor(diff/3600)+'h ago';
+  return Math.floor(diff/86400)+'d ago';
+}
+function esc(s){ const d=document.createElement('div'); d.innerText = s==null?'':String(s); return d.innerHTML; }
+
+function toast(msg, icon){
+  const c = document.getElementById('toastContainer');
+  const el = document.createElement('div');
+  el.className='toast';
+  el.innerHTML = ic(icon||'checkSm',14)+'<span>'+esc(msg)+'</span>';
+  c.appendChild(el);
+  setTimeout(()=>{ el.style.transition='opacity .3s'; el.style.opacity='0'; setTimeout(()=>el.remove(),300); }, 3200);
+}
+
+/* =========================================================================
+   DOCUMENT / EMPLOYMENT HELPERS
+   ========================================================================= */
+function employmentDocIds(){
+  return state.profile.employmentStatus==='self_employed'
+    ? ['annual_accounts','tax_returns','business_financials']
+    : ['salary_slips','employment_contract'];
+}
+function activeDocIds(){
+  const all = Object.keys(DOC_META);
+  const emp = employmentDocIds();
+  return all.filter(id=> DOC_META[id].category!=='employment' || emp.includes(id));
+}
+function requiredDocIds(){
+  return activeDocIds().filter(id=>DOC_META[id].required);
+}
+function docVerified(id){ return state.documents[id] && state.documents[id].status==='verified'; }
+function hasAnyIssue(){ return activeDocIds().some(id=> ISSUE_STATUSES.includes(state.documents[id].status)); }
+function missingRequiredDocs(){ return requiredDocIds().filter(id=> state.documents[id].status==='missing'); }
+function issueDocs(){ return activeDocIds().filter(id=> ISSUE_STATUSES.includes(state.documents[id].status)); }
+
+function isProfileComplete(){
+  const p = state.profile;
+  const baseOk = p.firstName && p.lastName && p.email && p.phone && p.targetPropertyValue && p.desiredMonthlyPayment && p.housingType;
+  const empOk = p.employmentStatus==='self_employed' ? true : !!p.employer;
+  return !!(baseOk && empOk);
+}
+
+function computeReadiness(){
+  let score = 0;
+  if(isProfileComplete()) score+=10;
+  if(state.profile.employmentStatus==='self_employed'){
+    if(docVerified('annual_accounts') && docVerified('tax_returns')) score+=10;
+    if(docVerified('business_financials')) score+=20;
+  } else {
+    if(docVerified('salary_slips')) score+=20;
+    if(docVerified('employment_contract')) score+=20;
+  }
+  if(docVerified('bank_statements')) score+=20;
+  if(docVerified('savings_statement')) score+=10;
+  if(docVerified('identity_document')) score+=10;
+  const anyUploaded = requiredDocIds().some(id=> state.documents[id].status!=='missing');
+  if(anyUploaded && !hasAnyIssue()) score+=10;
+  return Math.min(100, score);
+}
+
+function applicationStatusLabel(){
+  const r = computeReadiness();
+  const missing = missingRequiredDocs();
+  if(state.advisorReviewRequested) return 'In Advisor Review';
+  if(r>=90 && missing.length===0 && !hasAnyIssue()) return 'Ready for Advisor Review';
+  if(r>=50) return 'In Progress';
+  if(r>0) return 'Getting Started';
+  return 'Not Started';
+}
+
+function progressSteps(){
+  const req = requiredDocIds();
+  const anyAnalyzing = req.some(id=> state.documents[id].status==='analyzing');
+  const allUploaded = req.every(id=> state.documents[id].status!=='missing');
+  const r = computeReadiness();
+  const steps = [
+    {title:'Application Started', done:true},
+    {title:'Documents Uploaded', done: allUploaded},
+    {title:'AI Review Complete', done: allUploaded && !anyAnalyzing},
+    {title:'Ready For Advisor Review', done: r>=90 && missingRequiredDocs().length===0 && !hasAnyIssue()},
+    {title:'Advisor Review', done: state.advisorReviewRequested},
+    {title:'Final Offer', done:false}
+  ];
+  let currentSet=false;
+  steps.forEach(s=>{ if(!s.done && !currentSet){ s.current=true; currentSet=true; } });
+  return steps;
+}
+
+function nextSteps(){
+  const items = [];
+  if(!isProfileComplete()) items.push({text:'Complete your profile information', sub:'Helps Silta personalize guidance and confirm affordability basics.', action:"navigate('profile')", actionLabel:'Go to profile'});
+  missingRequiredDocs().slice(0,3).forEach(id=>{
+    items.push({text:'Upload '+DOC_META[id].label, sub:DOC_META[id].desc, action:"navigate('documents')", actionLabel:'Upload'});
+  });
+  issueDocs().slice(0,2).forEach(id=>{
+    items.push({text:'Resolve issue with '+DOC_META[id].label, sub:STATUS_META[state.documents[id].status].label+' — review and re-upload.', action:"navigate('documents')", actionLabel:'Review'});
+  });
+  const r = computeReadiness();
+  if(items.length===0 && r>=90 && !state.advisorReviewRequested){
+    items.push({text:'Request advisor review', sub:'Your application looks complete and ready for human review.', action:"requestAdvisorReview()", actionLabel:'Request'});
+  }
+  if(items.length<3){
+    items.push({text:'Ask Silta about mortgage options', sub:'Get personalized guidance based on your profile and documents.', action:"navigate('assistant')", actionLabel:'Ask Silta'});
+  }
+  items.push({text:'Contact your mortgage advisor', sub:'Send a message or request a callback any time.', action:"openAdvisorModal()", actionLabel:'Contact'});
+  return items.slice(0,5);
+}
+
+function pushInsight(text){
+  state.insights.unshift({id:uid(), text, time:new Date()});
+  state.insights = state.insights.slice(0,8);
+}
+function pushProactive(text){
+  pushInsight(text);
+  state.conversation.push({id:uid(), role:'assistant', content:text, time:new Date(), proactive:true});
+}
+
+/* =========================================================================
+   NAVIGATION / RENDER ROOT
+   ========================================================================= */
+const NAV_ITEMS = [
+  {id:'dashboard', label:'Dashboard', icon:'home'},
+  {id:'documents', label:'Documents', icon:'folder'},
+  {id:'assistant', label:'AI Assistant', icon:'chat'},
+  {id:'profile', label:'Profile', icon:'user'}
+];
+const PAGE_META = {
+  dashboard:{title:'Dashboard', sub:'Your mortgage application, at a glance'},
+  documents:{title:'Document Center', sub:'Upload and track everything your advisor needs'},
+  assistant:{title:'AI Assistant', sub:'Ask Silta anything about your mortgage journey'},
+  profile:{title:'Profile', sub:'Personal, employment and mortgage goal information'}
+};
+
+function navigate(page){
+  state.page = page;
+  renderAll();
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function renderSidebar(){
+  document.getElementById('brandMark').innerHTML = ic('bridge',22).replace('width="22" height="22"','width="22" height="22" style="stroke:#3FA876"');
+  document.getElementById('hybridIcon').innerHTML = ic('shield',18);
+  const nav = document.getElementById('sidebarNav');
+  nav.innerHTML = NAV_ITEMS.map(item=>{
+    const active = state.page===item.id ? 'active':'';
+    return '<button class="nav-item '+active+'" onclick="navigate(\''+item.id+'\')">'+ic(item.icon,17)+'<span>'+item.label+'</span></button>';
+  }).join('');
+  const name = (state.profile.firstName||'Welcome') + (state.profile.lastName? ' '+state.profile.lastName:'');
+  document.getElementById('sidebarUserName').innerText = state.profile.firstName? name : 'Welcome';
+  document.getElementById('sidebarUserAvatar').innerText = state.profile.firstName ? (state.profile.firstName[0]+(state.profile.lastName?state.profile.lastName[0]:'')).toUpperCase() : '—';
+}
+
+function renderTopbar(){
+  document.getElementById('topbarTitle').innerText = PAGE_META[state.page].title;
+  document.getElementById('topbarSub').innerText = PAGE_META[state.page].sub;
+  document.getElementById('topbarReadinessPill').innerText = 'Readiness '+computeReadiness()+'%';
+  document.getElementById('fabIcon').innerHTML = ic('chat',22);
+  document.getElementById('fabDot').style.display = state.page==='assistant' ? 'none':'block';
+}
+
+function renderAll(){
+  renderSidebar();
+  renderTopbar();
+  document.querySelectorAll('.page').forEach(p=>p.classList.add('hidden'));
+  document.getElementById('page-'+state.page).classList.remove('hidden');
+  if(state.page==='dashboard') renderDashboard();
+  if(state.page==='documents') renderDocuments();
+  if(state.page==='assistant') renderAssistant();
+  if(state.page==='profile') renderProfile();
+}
+
+/* =========================================================================
+   DASHBOARD
+   ========================================================================= */
+function ringSvg(pct, size, stroke){
+  size = size||172; stroke = stroke||14;
+  const r = (size-stroke)/2; const c = 2*Math.PI*r;
+  const offset = c - (pct/100)*c;
+  const color = pct>=80? '#3FA876' : pct>=50? '#4A7CA8' : '#B9762A';
+  return '<svg width="'+size+'" height="'+size+'" viewBox="0 0 '+size+' '+size+'">'
+    +'<circle cx="'+size/2+'" cy="'+size/2+'" r="'+r+'" stroke="#EEF1F5" stroke-width="'+stroke+'" fill="none"/>'
+    +'<circle cx="'+size/2+'" cy="'+size/2+'" r="'+r+'" stroke="'+color+'" stroke-width="'+stroke+'" fill="none" stroke-linecap="round" stroke-dasharray="'+c+'" stroke-dashoffset="'+offset+'" style="transition:stroke-dashoffset .6s ease"/>'
+    +'</svg>';
+}
+
+function renderDashboard(){
+  const r = computeReadiness();
+  const steps = progressSteps();
+  const missing = missingRequiredDocs();
+  const verifiedCount = activeDocIds().filter(docVerified).length;
+  const issues = issueDocs();
+
+  let html = '<div class="grid grid-2" style="align-items:start;">';
+
+  // Left column
+  html += '<div style="display:flex; flex-direction:column; gap:20px;">';
+
+  // readiness + progress card
+  html += '<div class="card"><div class="card-row"><div class="card-title">'+ic('target',16)+'Mortgage Readiness Score</div>'+pill(applicationStatusLabel(),'pill-info')+'</div>';
+  html += '<div style="display:flex; gap:26px; align-items:center; flex-wrap:wrap;">';
+  html += '<div class="ring-wrap">'+ringSvg(r)+'<div class="ring-center"><div class="ring-pct">'+r+'%</div><div class="ring-label">Application Readiness</div></div></div>';
+  html += '<div style="flex:1; min-width:220px;">';
+  html += '<div class="steps">';
+  steps.forEach(s=>{
+    const cls = 'step '+(s.done?'done':'')+(s.current?' current':'');
+    const dotIcon = s.done? ic('checkSm',12) : '';
+    html += '<div class="'+cls+'"><div class="step-line"></div><div class="step-dot">'+dotIcon+'</div><div class="step-body"><div class="step-title">'+s.title+'</div>'+(s.current?'<div class="step-note">In progress</div>':'')+'</div></div>';
+  });
+  html += '</div></div></div></div>';
+
+  // documents summary
+  html += '<div class="card"><div class="card-row"><div class="card-title">'+ic('folder',16)+'Documents Overview</div><button class="btn btn-outline btn-sm" onclick="navigate(\'documents\')">Open Document Center</button></div>';
+  html += '<div class="grid grid-3" style="gap:12px;">';
+  html += statBox(verifiedCount+'/'+activeDocIds().length, 'Verified Documents', 'pill-success');
+  html += statBox(String(missing.length), 'Missing Documents', missing.length? 'pill-warn':'pill-success');
+  html += statBox(String(issues.length), 'Need Attention', issues.length? 'pill-danger':'pill-success');
+  html += '</div>';
+  if(missing.length){
+    html += '<div class="divider"></div><div class="label-xs" style="margin-bottom:8px;">Missing</div>';
+    missing.forEach(id=>{ html += checklistRow(DOC_META[id].label,'warn'); });
+  }
+  html += '</div>';
+
+  // checklist
+  html += '<div class="card"><div class="card-title" style="margin-bottom:10px;">'+ic('checkSm',16)+'Mortgage Readiness Checklist</div>';
+  activeDocIds().forEach(id=>{
+    const ok = docVerified(id);
+    html += checklistRow(DOC_META[id].label, ok?'ok':'warn', ok?'Verified':STATUS_META[state.documents[id].status].label);
+  });
+  html += '</div>';
+
+  html += '</div>'; // end left col
+
+  // Right column
+  html += '<div style="display:flex; flex-direction:column; gap:20px;">';
+
+  // NEXT STEPS — most important widget
+  html += '<div class="next-steps-card"><div class="card-title">'+ic('sparkle',16)+'Your Next Steps</div>';
+  nextSteps().forEach((it,i)=>{
+    html += '<div class="next-item"><div class="next-num">'+(i+1)+'</div><div><div class="next-text">'+esc(it.text)+'</div><div class="next-sub">'+esc(it.sub)+'</div></div>'
+      +'<div class="next-action"><button class="btn btn-accent btn-sm" onclick="'+it.action+'">'+it.actionLabel+'</button></div></div>';
+  });
+  html += '</div>';
+
+  // advisor
+  html += '<div class="card"><div class="card-title" style="margin-bottom:13px;">'+ic('user',16)+'Your Mortgage Advisor</div>';
+  html += '<div class="advisor-card"><div class="advisor-avatar">'+state.advisor.initials+'</div><div><div class="advisor-name">'+state.advisor.name+'</div><div class="advisor-role">'+state.advisor.title+'</div></div></div>';
+  html += '<div class="advisor-actions"><button class="btn btn-outline btn-sm" onclick="openAdvisorModal(\'message\')">'+ic('chat',13)+'Message</button><button class="btn btn-outline btn-sm" onclick="openAdvisorModal(\'callback\')">'+ic('phone',13)+'Request callback</button></div>';
+  html += '</div>';
+
+  // insights
+  html += '<div class="card"><div class="card-title" style="margin-bottom:6px;">'+ic('sparkle',16)+'Recent AI Insights</div>';
+  if(state.insights.length===0){
+    html += '<div class="muted" style="font-size:12.5px; padding:8px 0;">Upload a document or ask Silta a question to see personalized insights here.</div>';
+  } else {
+    state.insights.slice(0,5).forEach(ins=>{
+      html += '<div class="insight-item"><div class="insight-dot">'+ic('sparkle',13)+'</div><div><div class="insight-text">'+esc(ins.text)+'</div><div class="insight-time">'+fmtTimeAgo(ins.time)+'</div></div></div>';
+    });
+  }
+  html += '</div>';
+
+  html += '</div>'; // end right col
+  html += '</div>'; // end grid
+
+  document.getElementById('page-dashboard').innerHTML = html;
+}
+
+function pill(text, cls){ return '<span class="pill '+cls+'">'+esc(text)+'</span>'; }
+function statBox(value,label,cls){
+  return '<div style="border:1px solid var(--gray-200); border-radius:10px; padding:13px;"><div style="font-family:var(--font-mono); font-weight:700; font-size:21px; color:var(--navy-900);">'+value+'</div><div style="font-size:11px; color:var(--gray-500); margin-top:3px;">'+label+'</div></div>';
+}
+function checklistRow(label, kind, sub){
+  return '<div class="checklist-item"><div class="checklist-dot '+(kind==='ok'?'ok':'warn')+'">'+ic(kind==='ok'?'checkSm':'alert',10)+'</div><div class="checklist-text">'+esc(label)+'</div>'+(sub?'<div class="checklist-sub">'+esc(sub)+'</div>':'')+'</div>';
+}
+
+/* =========================================================================
+   DOCUMENT CENTER
+   ========================================================================= */
+function renderDocuments(){
+  const r = computeReadiness();
+  let html = '<div style="display:flex; gap:10px; align-items:flex-start; background:var(--blue-100); border:1px solid #C8DDF0; border-radius:12px; padding:13px 15px; margin-bottom:18px; font-size:12.6px; color:var(--navy-800);">'+ic('sparkle',16)+'<div><strong>How analysis works:</strong> When you upload a document, Silta reads its actual text content, checks it is the right type for this field, and extracts the relevant figures. Documents that are unreadable, the wrong type, or outdated are flagged automatically. For best results, upload text-based PDFs (such as a downloaded bank statement or salary slip).</div></div>';
+  html += '<div class="card" style="margin-bottom:22px;"><div class="card-row"><div class="card-title">'+ic('target',16)+'Application Readiness</div>'+pill(r+'%','pill-info')+'</div>';
+  html += '<div style="background:var(--gray-100); border-radius:99px; height:10px; overflow:hidden;"><div style="width:'+r+'%; height:100%; background:linear-gradient(90deg,var(--blue-500),var(--green-500)); transition:width .5s;"></div></div>';
+  html += '<div class="muted" style="font-size:12px; margin-top:8px;">'+(missingRequiredDocs().length? missingRequiredDocs().length+' required document(s) still needed.' : 'All required documents have been uploaded.')+'</div></div>';
+
+  if(state.profile.employmentStatus==='self_employed'){
+    html += '<div class="issue-banner" style="margin-bottom:20px;">'+ic('alert',16)+'<div>Your profile is set to <strong>self-employed</strong>, so Silta is requesting annual accounts, tax returns and business financial statements instead of salary slips and an employment contract.</div></div>';
+  }
+
+  const cats = ['employment','financial','debt','identity'];
+  cats.forEach(cat=>{
+    const ids = activeDocIds().filter(id=>DOC_META[id].category===cat);
+    if(!ids.length) return;
+    html += '<div class="doc-cat-title">'+ic(CATEGORY_META[cat].icon,16)+'<span class="doc-cat-name">'+CATEGORY_META[cat].name+'</span><span class="doc-cat-meta">'+ids.filter(docVerified).length+'/'+ids.length+' verified'+(cat==='debt'?' · optional':'')+'</span></div>';
+    ids.forEach(id=> html += docCardHtml(id));
+  });
+
+  document.getElementById('page-documents').innerHTML = html;
+}
+
+function allowsMultiple(id){
+  // These documents are typically provided as several files (e.g. 3 months)
+  return ['salary_slips','bank_statements','annual_accounts','tax_returns'].includes(id);
+}
+
+function docCardHtml(id){
+  const meta = DOC_META[id];
+  const doc = state.documents[id];
+  const sm = STATUS_META[doc.status];
+  const multi = allowsMultiple(id);
+  const fileCount = (doc.files||[]).length;
+  let html = '<div class="doc-card"><div class="doc-card-top"><div class="doc-icon">'+ic('file',18)+'</div>';
+  html += '<div><div class="doc-name">'+meta.label+(meta.required?'':' <span class="muted" style="font-weight:500;">(optional)</span>')+(multi?' <span class="muted" style="font-weight:500;">· multiple files allowed</span>':'')+'</div>';
+  html += '<div class="doc-file">'+(fileCount? fileCount+' file'+(fileCount>1?'s':'')+' uploaded' : meta.desc)+'</div></div>';
+  html += '<div class="doc-status">'+pill(sm.label, sm.pill)+'</div></div>';
+
+  html += '<div class="doc-body">';
+
+  // Per-file list
+  if(fileCount){
+    html += '<div style="margin-top:4px; margin-bottom:12px;">';
+    doc.files.forEach((f,i)=>{
+      const fileStatus = STATUS_META[f.status]||STATUS_META.verified;
+      html += '<div style="display:flex; align-items:center; gap:9px; padding:7px 10px; background:var(--gray-50); border:1px solid var(--gray-200); border-radius:8px; margin-bottom:6px;">';
+      html += '<span style="flex:0 0 auto;">'+ic('file',14)+'</span>';
+      html += '<div style="flex:1; min-width:0;"><div style="font-size:12px; font-weight:600; color:var(--gray-800); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">'+esc(f.name)+'</div>';
+      html += '<div style="font-size:10.5px; color:var(--gray-500); font-family:var(--font-mono);">'+(f.sizeLabel||'')+(f.period?(' · '+esc(f.period)):'')+'</div></div>';
+      html += '<span class="pill '+fileStatus.pill+'" style="font-size:10px; padding:2px 7px;">'+fileStatus.label+'</span>';
+      html += '<button class="btn btn-ghost btn-sm" style="padding:3px 6px;" onclick="removeFile(\''+id+'\','+i+')" title="Remove">'+ic('x',13)+'</button>';
+      html += '</div>';
+    });
+    html += '</div>';
+  }
+
+  if(doc.status==='analyzing'){
+    html += '<div class="analyzing-row"><div class="spinner"></div> Silta is analyzing '+(multi?'your documents':'this document')+'…</div>';
+  } else {
+    const dzText = fileCount ? (multi?'Add another file':'Replace file') : (multi?'Click to upload one or more files':'Click to upload or drag a file here');
+    html += '<div class="dropzone" onclick="document.getElementById(\'file_'+id+'\').click()">'+ic('upload',20)
+      +'<div><div class="dropzone-text">'+dzText+'</div><div class="dropzone-sub">PDF, JPG or PNG · max 10MB'+(multi?' · select multiple at once':'')+'</div></div></div>';
+    html += '<input type="file" id="file_'+id+'"'+(multi?' multiple':'')+' accept=".pdf,.png,.jpg,.jpeg,.doc,.docx" style="display:none" onchange="handleFileInput(\''+id+'\', this.files)" />';
+  }
+
+  if(doc.note){
+    const danger = ['unreadable','wrong','unsupported'].includes(doc.status);
+    html += '<div class="issue-banner'+(danger?' danger':'')+'">'+ic('alert',16)+'<div>'+esc(doc.note)+'</div></div>';
+  }
+
+  if(Object.keys(doc.extracted||{}).length){
+    const fromReal = doc.extractedFromContent;
+    html += '<div style="margin-top:13px; padding-top:13px; border-top:1px dashed var(--gray-200);">';
+    html += '<div style="display:flex; align-items:center; gap:6px; margin-bottom:10px;">';
+    html += '<span class="label-xs">Extracted information'+(multi&&fileCount>1?' (combined across '+fileCount+' files)':'')+'</span>';
+    html += fromReal
+      ? '<span class="pill pill-success" style="font-size:10px; padding:2px 7px;">Read from your file</span>'
+      : '<span class="pill pill-neutral" style="font-size:10px; padding:2px 7px;">Demo — simulated data</span>';
+    html += '</div>';
+    html += '<div class="extract-grid" style="margin-top:0; padding-top:0; border-top:none;">';
+    Object.entries(doc.extracted).forEach(([k,v])=>{
+      html += '<div class="extract-item"><div class="extract-label">'+esc(k)+'</div><div class="extract-value">'+esc(v)+'</div></div>';
+    });
+    html += '</div>';
+    html += '<div style="font-size:10.5px; color:var(--gray-400); margin-top:8px;">'+ic('alert',11)+' '
+      +(fromReal
+        ? 'Silta read these values from the text of your uploaded document(s). Values it could not find are estimated.'
+        : 'These are demo values. In production, Silta extracts this from the document via OCR + AI. Upload a text-based PDF to see real values read from your file.')
+      +'</div>';
+    html += '</div>';
+  }
+  html += '</div></div>';
+  return html;
+}
+
+function removeFile(id, idx){
+  const doc = state.documents[id];
+  doc.files.splice(idx,1);
+  if(doc.files.length===0){
+    doc.status='missing'; doc.extracted={}; doc.note=null; doc.fileName=null; doc.extractedFromContent=false;
+  } else {
+    // Re-derive combined extraction from remaining files
+    recomputeDocExtraction(id);
+  }
+  renderDocuments();
+  if(state.page==='dashboard') renderDashboard();
+  renderTopbar();
+}
+
+function fileSizeLabel(bytes){
+  if(bytes<1024) return bytes+' B';
+  if(bytes<1024*1024) return (bytes/1024).toFixed(0)+' KB';
+  return (bytes/(1024*1024)).toFixed(1)+' MB';
+}
+
+// Read text content from a PDF file using PDF.js (returns '' if not a readable PDF)
+async function readPdfText(file){
+  try{
+    if(!window.pdfjsLib) return '';
+    if(!/\.pdf$/i.test(file.name) && file.type!=='application/pdf') return '';
+    const buf = await file.arrayBuffer();
+    const pdf = await window.pdfjsLib.getDocument({data:buf}).promise;
+    let text='';
+    const maxPages = Math.min(pdf.numPages, 5);
+    for(let p=1;p<=maxPages;p++){
+      const page = await pdf.getPage(p);
+      const content = await page.getTextContent();
+      text += content.items.map(it=>it.str).join(' ')+'\n';
+    }
+    return text;
+  }catch(e){
+    return '';
+  }
+}
+
+// Parse meaningful values out of raw document text. Returns an object of found fields.
+function parseDocumentContent(docId, text){
+  if(!text || text.length<20) return {found:{}, hasText:false};
+  const t = text.replace(/\u00a0/g,' ');
+  const found = {};
+
+  // ── Money amounts: € 4.250,00 / EUR 4250 / 4,250.00 ───────────────────────
+  function parseEuroAmounts(){
+    const amts = [];
+    const re = /(?:€|eur)\s*([\d.,]+)/gi;
+    let m;
+    while((m=re.exec(t))!==null){
+      let raw = m[1];
+      // Normalise: handle both 4.250,00 (NL) and 4,250.00 (EN)
+      let val;
+      if(/,\d{2}$/.test(raw)){ // ends with ,dd → NL decimal
+        val = parseFloat(raw.replace(/\./g,'').replace(',','.'));
+      } else if(/\.\d{2}$/.test(raw)){ // ends with .dd → EN decimal
+        val = parseFloat(raw.replace(/,/g,''));
+      } else {
+        val = parseFloat(raw.replace(/[.,]/g,''));
+      }
+      if(!isNaN(val) && val>0 && val<100000000) amts.push(val);
+    }
+    return amts;
+  }
+  const amounts = parseEuroAmounts();
+
+  // ── Employer / company (looks for "BV", "B.V.", or labelled fields) ───────
+  function findEmployer(){
+    let m = t.match(/(?:employer|werkgever|company|bedrijf)\s*[:\-]?\s*([A-Z][A-Za-z0-9&.\- ]{2,40}?(?:B\.?V\.?|N\.?V\.?|BV|NV|Ltd|GmbH|Inc))/);
+    if(m) return m[1].trim();
+    m = t.match(/\b([A-Z][A-Za-z0-9&.\- ]{2,40}?\s+B\.?V\.?)\b/);
+    if(m) return m[1].trim();
+    return null;
+  }
+
+  // ── IBAN ──────────────────────────────────────────────────────────────────
+  function findIBAN(){
+    const m = t.match(/\bNL\d{2}\s?[A-Z]{4}\s?\d{4}\s?\d{4}\s?\d{0,2}\b/);
+    return m ? m[0].replace(/\s+/g,' ').trim() : null;
+  }
+
+  // ── Labelled value: "Net pay 3.182,00" / "Netto 3182" ────────────────────
+  function findLabeled(labels){
+    for(const lab of labels){
+      // Require a € sign OR a properly-formatted amount (with decimals or thousands sep)
+      // within a short window after the label. Avoids grabbing stray digits like dates.
+      const re = new RegExp(lab+'[\\s\\S]{0,40}?(?:€|eur)\\s*([\\d.,]+\\d)','i');
+      let m = t.match(re);
+      if(!m){
+        const re2 = new RegExp(lab+'[^\\dA-Za-z]{0,6}([\\d]{1,3}(?:[.,]\\d{3})+(?:[.,]\\d{2})?)','i');
+        m = t.match(re2);
+      }
+      if(m){
+        let raw=m[1], val;
+        if(/,\d{2}$/.test(raw)) val=parseFloat(raw.replace(/\./g,'').replace(',','.'));
+        else if(/\.\d{2}$/.test(raw)) val=parseFloat(raw.replace(/,/g,''));
+        else val=parseFloat(raw.replace(/[.,]/g,''));
+        if(!isNaN(val)&&val>0) return val;
+      }
+    }
+    return null;
+  }
+
+  // ── Date / period ─────────────────────────────────────────────────────────
+  function findPeriod(){
+    let m = t.match(/\b(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec|maart|mei|okt)[a-z]*\.?\s*20\d{2}\b/i);
+    if(m) return m[0];
+    m = t.match(/\b20\d{2}-\d{2}-\d{2}\b/);
+    if(m) return m[0];
+    m = t.match(/\b\d{2}[-\/]\d{2}[-\/]20\d{2}\b/);
+    if(m) return m[0];
+    return null;
+  }
+
+  const employer = findEmployer();
+  const iban = findIBAN();
+  const period = findPeriod();
+
+  if(docId==='salary_slips'){
+    const gross = findLabeled(['bruto','gross']);
+    const net = findLabeled(['netto','net pay','net salary','net te betalen']);
+    if(gross) found['Monthly Income'] = fmtMoney(Math.round(gross));
+    else if(net) found['Monthly Income'] = fmtMoney(Math.round(net/0.748)); // estimate gross from net
+    else if(amounts.length){ found['Monthly Income'] = fmtMoney(Math.round(Math.max(...amounts))); }
+    if(net) found['Net Pay'] = fmtMoney(Math.round(net));
+    if(employer) found['Employer'] = employer;
+    if(period) found['Period'] = period;
+  }
+  else if(docId==='employment_contract'){
+    const sal = findLabeled(['bruto','gross','salary','salaris']);
+    if(sal) found['Monthly Income'] = fmtMoney(Math.round(sal));
+    else if(amounts.length) found['Monthly Income'] = fmtMoney(Math.round(Math.max(...amounts)));
+    if(employer) found['Employer'] = employer;
+    if(/permanent|onbepaalde tijd|vast/i.test(t)) found['Contract Type'] = 'Permanent';
+    else if(/temporary|bepaalde tijd|tijdelijk/i.test(t)) found['Contract Type'] = 'Temporary';
+  }
+  else if(docId==='bank_statements'){
+    const bal = findLabeled(['closing balance','eindsaldo','balance','saldo']);
+    if(bal) found['Closing Balance'] = fmtMoney(Math.round(bal));
+    else if(amounts.length) found['Closing Balance'] = fmtMoney(Math.round(amounts[amounts.length-1]));
+    if(iban) found['IBAN'] = iban;
+    if(period) found['Statement Period'] = period;
+  }
+  else if(docId==='savings_statement'){
+    // Look for an explicitly labelled current balance first
+    let bal = findLabeled(['current savings balance','huidige saldo','current balance','spaarsaldo']);
+    if(!bal){
+      // Otherwise take the largest € amount, but exclude common non-balance figures
+      // (deposit guarantee €100,000, interest rates) by filtering them out
+      const filtered = amounts.filter(a=> a!==100000 && a>50);
+      if(filtered.length) bal = Math.max(...filtered);
+    }
+    if(bal) found['Savings Balance'] = fmtMoney(Math.round(bal));
+    if(iban) found['IBAN'] = iban;
+  }
+  else if(docId==='student_debt'){
+    const bal = findLabeled(['outstanding','openstaand','debt','schuld','balance']);
+    if(bal) found['Student Debt'] = fmtMoney(Math.round(bal));
+    else if(amounts.length) found['Student Debt'] = fmtMoney(Math.round(Math.max(...amounts)));
+  }
+  else if(docId==='personal_loans'){
+    const bal = findLabeled(['outstanding','balance','schuld','saldo']);
+    if(bal!==null) found['Loan Balance'] = fmtMoney(Math.round(bal));
+    else if(amounts.length) found['Loan Balance'] = fmtMoney(Math.round(Math.max(...amounts)));
+  }
+  else if(docId==='identity_document'){
+    if(/passport|paspoort/i.test(t)) found['Document Type']='Passport';
+    else if(/identity|identiteit|id card|idkaart/i.test(t)) found['Document Type']='ID Card';
+    const exp = t.match(/(?:expir|verval|valid until|geldig tot)[^\d]{0,15}(\d{2}[-\/ ]\w{2,4}[-\/ ]20\d{2}|\d{2}[-\/]\d{2}[-\/]20\d{2}|20\d{2})/i);
+    if(exp) found['Expiry']=exp[1];
+  }
+  else if(docId==='annual_accounts'){
+    if(amounts.length) found['Annual Income'] = fmtMoney(Math.round(Math.max(...amounts)));
+    if(employer) found['Business Name'] = employer;
+  }
+  else if(docId==='tax_returns'){
+    const inc = findLabeled(['taxable','belastbaar','income','inkomen']);
+    if(inc) found['Taxable Income'] = fmtMoney(Math.round(inc));
+    else if(amounts.length) found['Taxable Income'] = fmtMoney(Math.round(Math.max(...amounts)));
+  }
+  else if(docId==='business_financials'){
+    if(amounts.length) found['Revenue'] = fmtMoney(Math.round(Math.max(...amounts)));
+    if(/profit|winst/i.test(t)) found['Status']='Profitable';
+  }
+
+  return {found, hasText:true, period};
+}
+
+// ── CONTENT CLASSIFIER ───────────────────────────────────────────────────────
+// Decides, from the document's actual text + filename, what this document is and
+// whether it belongs in this slot. Returns {verdict, confidence, reason}.
+// Verdicts: 'verified' | 'wrong' | 'unreadable' | 'outdated' | 'needs_review' | 'unsupported'
+
+// Keyword fingerprints for each document type (used to recognise content)
+const DOC_FINGERPRINTS = {
+  salary_slips:        {must:/salar|loonstrook|loonstrok|payslip|wage slip|salaris|bruto|netto|loonheffing/i, label:'salary slip'},
+  employment_contract: {must:/employment (agreement|contract)|arbeidsovereenkomst|arbeidscontract|dienstverband|appointment letter|terms of employment/i, label:'employment contract'},
+  bank_statements:     {must:/bank statement|rekeningafschrift|account statement|opening balance|closing balance|beginsaldo|eindsaldo|statement period/i, label:'bank statement'},
+  savings_statement:   {must:/savings|spaarrekening|spaaroverzicht|saving account|spaarsaldo|savings balance|deposit account/i, label:'savings statement'},
+  student_debt:        {must:/student (debt|loan|finance)|duo|studieschuld|studielening|leenoverzicht|study loan|tuition loan/i, label:'student debt statement'},
+  personal_loans:      {must:/personal loan|consumer credit|persoonlijke lening|doorlopend krediet|loan statement|credit agreement|leningoverzicht/i, label:'personal loan statement'},
+  identity_document:   {must:/passport|paspoort|identity card|identiteitskaart|id card|nationality|nationaliteit|date of birth|machine readable|koninkrijk der nederlanden|document no/i, label:'ID document'},
+  annual_accounts:     {must:/annual accounts|jaarrekening|jaarcijfers|balance sheet|balans|profit and loss|financial statements/i, label:'annual accounts'},
+  tax_returns:         {must:/tax return|belastingaangifte|belastingaanslag|aangifte inkomstenbelasting|taxable income|belastbaar inkomen|income tax assessment/i, label:'tax return'},
+  business_financials: {must:/profit (and|&) loss|balance sheet|cash flow|winst en verlies|balans|resultatenrekening|revenue|omzet|financial statement/i, label:'business financials'},
+};
+
+// Strong signals that a document is something ELSE entirely (wrong upload)
+const WRONG_CONTENT = [
+  {re:/booking confirmation|reservation|boarding pass|airline|hotel|check-?in|departure|itinerary|vacation|holiday/i, what:'a travel or booking document'},
+  {re:/rental agreement|tenancy agreement|huurovereenkomst|huurcontract|lease agreement|landlord|verhuurder|monthly rent|maandelijkse huur/i, what:'a rental/tenancy agreement'},
+  {re:/energy bill|utility bill|energierekening|electricity|gas usage|water usage|meter reading|meterstand/i, what:'a utility bill'},
+  {re:/insurance policy|verzekeringspolis|policy number|premium|dekking|coverage|aansprakelijkheid/i, what:'an insurance document'},
+  {re:/invoice|factuur|receipt|order confirmation|webshop|bestelnummer|order number|amount due/i, what:'an invoice or receipt'},
+  {re:/prescription|patient|huisarts|ziekenhuis|diagnosis|apotheek/i, what:'a medical document'},
+  {re:/\bmenu\b|recipe/i, what:'a menu or restaurant document'},
+];
+
+function classifyDocument(docId, file, text){
+  const name = (file.name||'').toLowerCase();
+  const ext = name.split('.').pop();
+  const okExt = ['pdf','png','jpg','jpeg','doc','docx'];
+
+  // 1) Unsupported file type
+  if(!okExt.includes(ext)){
+    return {verdict:'unsupported', confidence:1, reason:'This file type is not supported. Please upload a PDF, JPG or PNG.'};
+  }
+
+  const hasText = !!(text && text.trim().length>40);
+  const t = hasText ? text : '';
+
+  // 2) If we DID read text, classify by content
+  if(hasText){
+    const fp = DOC_FINGERPRINTS[docId];
+
+    // 2a) Does the content clearly match a DIFFERENT, non-mortgage document?
+    for(const w of WRONG_CONTENT){
+      if(w.re.test(t)){
+        if(!(fp && fp.must.test(t))){
+          return {verdict:'wrong', confidence:0.9, reason:'This looks like '+w.what+', which is not relevant for a mortgage application. Please upload the correct document for this field.'};
+        }
+      }
+    }
+
+    // 2b) Score every document type by how strongly its fingerprint matches,
+    //     then see which type fits best. This prevents e.g. a bank statement
+    //     (which mentions "salaris") being accepted in the salary-slip slot.
+    const scores = {};
+    for(const [otherId, ofp] of Object.entries(DOC_FINGERPRINTS)){
+      const matches = (t.match(new RegExp(ofp.must.source, 'gi'))||[]).length;
+      scores[otherId] = matches;
+    }
+    const thisScore = scores[docId] || 0;
+    let bestId = docId, bestScore = thisScore;
+    for(const [id,sc] of Object.entries(scores)){
+      if(sc > bestScore){ bestScore = sc; bestId = id; }
+    }
+
+    // 2c) If another document type clearly fits much better, it's the wrong slot
+    if(bestId !== docId && bestScore >= thisScore + 2){
+      const lbl = DOC_FINGERPRINTS[bestId].label;
+      return {verdict:'wrong', confidence:0.85, reason:'This looks like a '+lbl+', not the document expected here ('+DOC_META[docId].label.toLowerCase()+'). Please upload it in the correct field.'};
+    }
+
+    // 2d) Does the content match THIS slot's expected type at all?
+    if(fp && thisScore>0){
+      if(docId==='salary_slips' && isOutdatedByText(t)){
+        return {verdict:'outdated', confidence:0.8, reason:'This salary slip appears older than the standard verification period (most recent 3 months). Please upload a more recent one.'};
+      }
+      return {verdict:'verified', confidence:0.9, reason:null};
+    }
+
+    // 2e) Readable but matches a different slot (any score) → wrong
+    if(bestId !== docId && bestScore>0){
+      const lbl = DOC_FINGERPRINTS[bestId].label;
+      return {verdict:'wrong', confidence:0.8, reason:'This looks like a '+lbl+', not the document expected here ('+DOC_META[docId].label.toLowerCase()+'). Please upload it in the correct field.'};
+    }
+
+    // 2f) Readable but unrecognised → needs manual review (do NOT fabricate data)
+    return {verdict:'needs_review', confidence:0.4, reason:'Silta read this document but could not confirm it is a '+DOC_META[docId].label.toLowerCase()+'. A mortgage advisor will review it manually.'};
+  }
+
+  // 3) No readable text (scan, photo, or PDF.js unavailable)
+  const fnVerdict = classifyByFilename(docId, name);
+  if(fnVerdict.verdict==='wrong' || fnVerdict.verdict==='unsupported') return fnVerdict;
+  if(fnVerdict.verdict==='verified'){
+    return {verdict:'needs_review', confidence:0.3, reason:'Silta could not read text from this file (it may be a scan or photo), so it could not automatically verify the contents. A mortgage advisor will review it. Tip: upload a text-based PDF for automatic verification.'};
+  }
+  return {verdict:'unreadable', confidence:0.5, reason:'The uploaded document could not be analyzed automatically. Please upload a clear, text-based PDF, or a mortgage advisor will review it manually.'};
+}
+
+function isOutdatedByText(t){
+  const years = (t.match(/\b(20\d{2})\b/g)||[]).map(Number);
+  if(!years.length) return false;
+  const newest = Math.max(...years);
+  const nowYear = new Date().getFullYear();
+  return newest < nowYear - 1;
+}
+
+function classifyByFilename(docId, name){
+  const wrong = [
+    /vacation|holiday|ticket|flight|hotel|booking|reservation|airbnb|ibiza|trip/,
+    /rental|huur|lease|tenancy|verhuur|huurcontract|huurovereenkomst/,
+    /utility|energie|stroom|water_bill|internet_bill|energierekening|ziggo|eneco|essent/,
+    /verzekering|insurance|polis/,
+    /medisch|huisarts|ziekenhuis|hospital|medical|prescription/,
+    /factuur|invoice|receipt|webshop|bol_com|order/,
+    /menu|recipe|restaurant/,
+  ];
+  for(const re of wrong){ if(re.test(name)) return {verdict:'wrong', confidence:0.6, reason:'Based on the file name, this does not appear to be a '+DOC_META[docId].label.toLowerCase()+' and may not be relevant for a mortgage application. Please check you uploaded the correct file.'}; }
+
+  const expects = {
+    salary_slips:        /salar|loonstrook|loon|payslip|wage|salaris/,
+    employment_contract: /contract|arbeids|employment|overeenkomst|dienstverband/,
+    bank_statements:     /bank|statement|afschrift|rekening|transactie/,
+    savings_statement:   /saving|spaar|spaarrekening|deposit/,
+    student_debt:        /student|duo|studie|studieschuld|study/,
+    personal_loans:      /loan|lening|krediet|credit/,
+    identity_document:   /passport|paspoort|id_|identiteit|idcard|identity/,
+    annual_accounts:     /annual|jaarrekening|accounts|jaarcijfers/,
+    tax_returns:         /tax|belasting|aanslag|aangifte/,
+    business_financials: /financial|profit|balans|resultaten/,
+  };
+  const pattern = expects[docId];
+  if(pattern && pattern.test(name)) return {verdict:'verified', confidence:0.5, reason:null};
+  return {verdict:'unrecognized', confidence:0.2, reason:null};
+}
+
+function mergeExtraction(target, incoming){
+  Object.entries(incoming).forEach(([k,v])=>{
+    if(!(k in target)) target[k]=v;
+  });
+  return target;
+}
+
+async function handleFileInput(docId, fileList){
+  if(!fileList || !fileList.length) return;
+  const files = Array.from(fileList);
+  const multi = allowsMultiple(docId);
+  const before = computeReadiness();
+
+  const doc = state.documents[docId];
+  doc.status='analyzing';
+  doc.note=null;
+  if(state.page==='documents') renderDocuments();
+
+  const analyzed = [];
+  for(const file of files){
+    const text = await readPdfText(file);
+    analyzed.push({file, text});
+  }
+
+  setTimeout(()=> finishAnalysisMulti(docId, analyzed, before, multi), 900+Math.random()*700);
+}
+
+const SCENARIO_NOTES = {
+  wrong:'This document does not appear relevant for a mortgage application.',
+  unrecognized:'Silta could not confirm this is the expected document type from the file. A mortgage advisor will need to review it manually.',
+  duplicate:'This document appears to have already been uploaded.',
+  outdated:'This document appears older than the standard verification period.',
+  incomplete:'This document appears incomplete. Please upload the full document.',
+  unreadable:'The uploaded document could not be analyzed. Please try a clearer scan or photo.',
+  unsupported:'This file type is not supported. Please upload a PDF, JPG or PNG.',
+  needs_review:'A discrepancy was detected between uploaded documents. Your advisor will need to review this.'
+};
+
+// Build the combined extracted object + per-file status for a document, using
+// already-read text content where available.
+function recomputeDocExtraction(docId){
+  const doc = state.documents[docId];
+  let combined = {};
+  let anyReal = false;
+  doc.files.forEach((f)=>{
+    if(f.text && f.text.trim().length>40){
+      const parsed = parseDocumentContent(docId, f.text);
+      if(Object.keys(parsed.found).length){ anyReal=true; mergeExtraction(combined, parsed.found); }
+      if(parsed.period && !f.period) f.period=parsed.period;
+    }
+  });
+  // IMPORTANT: never fabricate figures. If nothing was read from content,
+  // leave extracted empty rather than inventing numbers.
+  doc.extracted = combined;
+  doc.extractedFromContent = anyReal;
+}
+
+// Aggregate per-file verdicts into one document status (worst-case wins, but
+// 'verified' only if at least one file verified and none are wrong/unreadable).
+function aggregateVerdict(verdicts){
+  const order = ['unsupported','wrong','unreadable','outdated','needs_review','verified'];
+  // pick the most severe verdict present
+  for(const v of order){
+    if(verdicts.includes(v)) return v;
+  }
+  return 'needs_review';
+}
+
+function finishAnalysisMulti(docId, analyzed, before, multi){
+  const meta = DOC_META[docId];
+  const doc = state.documents[docId];
+
+  // Classify each file independently by its actual content
+  const perFile = analyzed.map(a=>({
+    file:a.file, text:a.text, result:classifyDocument(docId, a.file, a.text)
+  }));
+
+  // Push each file with its individual verdict
+  perFile.forEach(pf=>{
+    doc.files.push(fileEntry(pf.file, pf.text, pf.result.verdict));
+  });
+
+  // Aggregate to a document-level status
+  const verdicts = perFile.map(pf=>pf.result.verdict);
+  const status = aggregateVerdict(verdicts);
+  doc.status = status;
+
+  // Choose a representative note from the most severe file
+  const severe = perFile.find(pf=>pf.result.verdict===status);
+  doc.note = severe && severe.result.reason ? severe.result.reason : null;
+
+  // Extract figures ONLY from files that were actually verified/recognised
+  // and had readable content. Never invent numbers.
+  if(status==='verified' || status==='outdated' || status==='needs_review'){
+    recomputeDocExtraction(docId);
+  } else {
+    doc.extracted = {};
+    doc.extractedFromContent = false;
+  }
+
+  doc.fileName = doc.files.length ? doc.files[doc.files.length-1].name : null;
+
+  // Cross-check income conflict between salary slip & contract (content-based)
+  checkIncomeConflict();
+
+  const after = computeReadiness();
+  const n = analyzed.length;
+
+  if(status==='verified'){
+    const stillMissing = missingRequiredDocs();
+    let msg = 'I analyzed '+(n>1? ('your '+n+' '+meta.label.toLowerCase()+' files') : ('your '+meta.label.toLowerCase()))+' and confirmed '+(n>1?'they are':'it is')+' the right document type. ';
+    if(doc.extractedFromContent && Object.keys(doc.extracted).length){
+      const k0 = Object.keys(doc.extracted)[0];
+      msg += 'I read '+(k0.toLowerCase())+' of '+doc.extracted[k0]+' directly from the document. ';
+    }
+    msg += stillMissing.length ? (stillMissing.length===1? DOC_META[stillMissing[0]].label+' is still required.' : stillMissing.slice(0,2).map(i=>DOC_META[i].label).join(' and ')+' are still required.') : 'All required documents are now uploaded.';
+    pushProactive(msg);
+  } else if(status==='outdated'){
+    pushProactive('The '+meta.label.toLowerCase()+' you uploaded appears older than the standard verification period. Please upload a more recent version when you can.');
+  } else if(status==='wrong'){
+    pushProactive('The file you uploaded for '+meta.label.toLowerCase()+' does not appear to be the right document. '+(doc.note||'')+' I have not recorded any figures from it.');
+  } else if(status==='unreadable' || status==='unsupported'){
+    pushProactive('I could not analyze the file you uploaded for '+meta.label.toLowerCase()+'. '+(doc.note||''));
+  } else {
+    pushProactive('I have logged your upload for '+meta.label.toLowerCase()+', but could not fully verify it automatically. A mortgage advisor will take a look.');
+  }
+
+  if(after!==before){
+    pushProactive('Your readiness score '+(after>before?'increased':'changed')+' from '+before+'% to '+after+'%. '+readinessHint(after));
+  }
+
+  if(state.page==='documents') renderDocuments();
+  if(state.page==='dashboard') renderDashboard();
+  renderTopbar();
+  if(state.page==='assistant') renderAssistant();
+}
+
+function fileEntry(file, text, status){
+  return { name:file.name, size:file.size, sizeLabel:fileSizeLabel(file.size), text:text||'', status:status, period:null };
+}
+
+function checkIncomeConflict(){
+  const a = state.documents['salary_slips'], b = state.documents['employment_contract'];
+  if(!a || !b) return;
+  const ai = a.extracted && a.extracted['Monthly Income'] ? parseInt(String(a.extracted['Monthly Income']).replace(/[^\d]/g,'')) : null;
+  const bi = b.extracted && b.extracted['Monthly Income'] ? parseInt(String(b.extracted['Monthly Income']).replace(/[^\d]/g,'')) : null;
+  if(ai && bi && Math.abs(ai-bi)>=500){
+    if(a.status==='verified') { a.status='needs_review'; a.note=SCENARIO_NOTES.needs_review; }
+    if(b.status==='verified') { b.status='needs_review'; b.note=SCENARIO_NOTES.needs_review; }
+  }
+}
+
+function readinessHint(score){
+  if(score>=90) return 'Your application looks ready for advisor review.';
+  if(score>=70) return 'Uploading your remaining documents would prepare your application for advisor review.';
+  if(score>=40) return 'A few more documents would meaningfully move your application forward.';
+  return 'Uploading your income and identity documents is the fastest way to make progress.';
+}
+
+/* =========================================================================
+   PROFILE
+   ========================================================================= */
+function renderProfile(){
+  const p = state.profile;
+  let html = '<div class="grid grid-2" style="align-items:start;">';
+  html += '<div class="card">';
+
+  html += section('user','Personal Information','Used to verify your identity and contact you about your application.');
+  html += '<div class="form-grid">';
+  html += field('First name','firstName',p.firstName);
+  html += field('Last name','lastName',p.lastName);
+  html += field('Email address','email',p.email,'email');
+  html += field('Phone number','phone',p.phone,'tel');
+  html += field('Date of birth','dob',p.dob,'date');
+  html += '</div><div class="divider"></div>';
+
+  html += section('building','Employment Information','Helps Silta request the right documents for your situation.');
+  html += '<div class="form-grid">';
+  html += '<div class="field"><label>Employment status</label><select id="f_employmentStatus" onchange="onEmploymentChange(this.value)">'
+    +'<option value="employed" '+(p.employmentStatus==='employed'?'selected':'')+'>Employed</option>'
+    +'<option value="self_employed" '+(p.employmentStatus==='self_employed'?'selected':'')+'>Self-employed</option></select></div>';
+  html += field(p.employmentStatus==='self_employed'?'Business name':'Employer','employer',p.employer);
+  html += field('Job title','jobTitle',p.jobTitle);
+  html += field('Employment duration','employmentDuration',p.employmentDuration,'text','e.g. 2 years 3 months');
+  html += '</div><div class="divider"></div>';
+
+  html += section('target','Mortgage Goals','Your target budget and preferences — this feeds directly into Silta\'s guidance.');
+  html += '<div class="form-grid">';
+  html += field('Target property value (€)','targetPropertyValue',p.targetPropertyValue,'number');
+  html += field('Desired monthly payment (€)','desiredMonthlyPayment',p.desiredMonthlyPayment,'number');
+  html += '<div class="field"><label>Housing type</label><select id="f_housingType">'
+    +['','Apartment','Family home','New-build','Existing build'].map(o=>'<option value="'+o+'" '+(p.housingType===o?'selected':'')+'>'+(o||'Select…')+'</option>').join('')+'</select></div>';
+  html += field('Target city / area','city',p.city);
+  html += '<div class="field"><label>Move-in timeframe</label><select id="f_moveInTimeframe">'
+    +['','As soon as possible','3–6 months','6–12 months','12+ months'].map(o=>'<option value="'+o+'" '+(p.moveInTimeframe===o?'selected':'')+'>'+(o||'Select…')+'</option>').join('')+'</select></div>';
+  html += '</div>';
+
+  html += '<div class="divider"></div><button class="btn btn-primary" onclick="saveProfile()">'+ic('checkSm',14)+'Save profile</button>';
+  html += '</div>';
+
+  // right column summary
+  html += '<div style="display:flex; flex-direction:column; gap:20px;">';
+  html += '<div class="card"><div class="card-title" style="margin-bottom:10px;">'+ic('sparkle',16)+'Why this matters</div><div class="muted" style="font-size:12.6px; line-height:1.6;">Silta\'s AI assistant references your profile to personalize answers — for example, tailoring affordability guidance to your target property value, or adjusting required documents if you\'re self-employed. Nothing here is shared beyond your application.</div></div>';
+  html += '<div class="card"><div class="card-title" style="margin-bottom:10px;">'+ic('target',16)+'Profile Completeness</div>'
+    +pill(isProfileComplete()? 'Complete':'Incomplete', isProfileComplete()?'pill-success':'pill-warn')
+    +'<div class="muted" style="font-size:12px; margin-top:10px;">A complete profile contributes 10% to your overall readiness score.</div></div>';
+  html += '</div>';
+
+  html += '</div>';
+  document.getElementById('page-profile').innerHTML = html;
+}
+function section(icon,title,desc){
+  return '<div class="form-section"><div class="form-section-title">'+ic(icon,16)+title+'</div><div class="form-section-desc">'+desc+'</div></div>';
+}
+function field(label,id,val,type,placeholder){
+  return '<div class="field"><label>'+label+'</label><input id="f_'+id+'" type="'+(type||'text')+'" value="'+esc(val||'')+'" placeholder="'+(placeholder||'')+'" /></div>';
+}
+function onEmploymentChange(v){
+  state.profile.employmentStatus = v;
+  renderProfile();
+}
+function saveProfile(){
+  const before = computeReadiness();
+  const p = state.profile;
+  ['firstName','lastName','email','phone','dob','employer','jobTitle','employmentDuration','targetPropertyValue','desiredMonthlyPayment','city'].forEach(k=>{
+    const el = document.getElementById('f_'+k); if(el) p[k]=el.value;
+  });
+  const ht = document.getElementById('f_housingType'); if(ht) p.housingType = ht.value;
+  const mt = document.getElementById('f_moveInTimeframe'); if(mt) p.moveInTimeframe = mt.value;
+  const after = computeReadiness();
+  toast('Profile saved');
+  if(after!==before){
+    pushProactive('Your readiness score increased from '+before+'% to '+after+'%. '+readinessHint(after));
+  } else {
+    pushInsight('Profile information updated.');
+  }
+  renderAll();
+}
+
+/* =========================================================================
+   AI ASSISTANT
+   ========================================================================= */
+let typingActive=false;
+
+function seedConversationIfEmpty(){
+  if(state.conversation.length===0){
+    state.conversation.push({id:uid(), role:'assistant', proactive:false,
+      content:"Hello, I'm Silta — your AI mortgage assistant. I can explain mortgage concepts, walk you through what's required, and reference your profile and uploaded documents to give you personalized guidance. Your mortgage advisor will always validate anything that matters for a final decision. How can I help today?",
+      time:new Date()});
+  }
+}
+
+function renderAssistant(){
+  seedConversationIfEmpty();
+  let html = '<div class="assistant-shell">';
+  html += '<div class="chat-panel">';
+  html += '<div class="chat-header"><div class="silta-mark">'+ic('bridge',18)+'</div><div><div class="chat-header-name">Silta AI Assistant</div><div class="chat-header-sub"><span class="dot"></span>Online · grounded in your profile &amp; documents</div></div>';
+  html += '<div class="chat-header-actions"><button class="btn btn-ghost btn-sm" onclick="openAISettings()" title="Connect your own AI key">'+ic('sparkle',13)+'AI settings</button><button class="btn btn-ghost btn-sm" onclick="clearChat(false)">New conversation</button><button class="btn btn-ghost btn-sm" onclick="clearChat(true)">Clear chat</button></div></div>';
+
+  html += '<div class="chat-messages" id="chatMessages">';
+  state.conversation.forEach(m=> html += messageHtml(m));
+  if(typingActive){
+    html += '<div class="typing-row"><div class="msg-avatar" style="background:var(--navy-900); display:flex; align-items:center; justify-content:center;">'+ic('bridge',13)+'</div><div class="typing-bubble"><span></span><span></span><span></span></div></div>';
+  }
+  html += '</div>';
+
+  html += '<div class="suggest-row" id="suggestRow">'+state.suggestions.map(s=>'<button class="chip" onclick="askSuggested(this)">'+esc(s)+'</button>').join('')+'</div>';
+
+  html += '<div class="chat-input-bar"><textarea id="chatInput" rows="1" placeholder="Ask Silta about your mortgage…" onkeydown="if(event.key===\'Enter\' && !event.shiftKey){event.preventDefault(); sendMessage();}"></textarea>'
+    +'<button class="send-btn" id="sendBtn" onclick="sendMessage()">'+ic('send',17)+'</button></div>';
+  html += '</div>';
+
+  // context panel
+  html += '<div class="context-panel">';
+  html += '<div class="ctx-card"><div class="ctx-title">Your Profile Snapshot</div>';
+  html += ctxRow('Name', state.profile.firstName? state.profile.firstName+' '+state.profile.lastName : '—');
+  html += ctxRow('Employment', state.profile.employmentStatus==='self_employed'?'Self-employed':'Employed');
+  html += ctxRow('Target property', fmtMoney(state.profile.targetPropertyValue));
+  html += ctxRow('Readiness score', computeReadiness()+'%');
+  html += '</div>';
+
+  html += '<div class="ctx-card"><div class="ctx-title">Documents Used For Context</div>';
+  const verifiedDocs = activeDocIds().filter(docVerified);
+  if(verifiedDocs.length===0){ html += '<div class="muted" style="font-size:12px;">No verified documents yet — guidance will be general until you upload some.</div>'; }
+  verifiedDocs.forEach(id=> html += ctxRow(DOC_META[id].label,'Verified'));
+  html += '</div>';
+
+  html += '<div class="ctx-card"><div class="ctx-title">Missing Documents</div>';
+  const missing = missingRequiredDocs();
+  if(missing.length===0){ html += '<div class="muted" style="font-size:12px;">None — all required documents uploaded.</div>'; }
+  missing.forEach(id=> html += ctxRow(DOC_META[id].label,'Missing'));
+  html += '</div>';
+
+  html += '<button class="btn btn-outline" style="width:100%; justify-content:center;" onclick="openAdvisorModal()">'+ic('phone',15)+'Contact your advisor</button>';
+  html += '</div>';
+
+  html += '</div>';
+  document.getElementById('page-assistant').innerHTML = html;
+  scrollChatToBottom();
+}
+
+function ctxRow(label,val){ return '<div class="ctx-row"><span>'+esc(label)+'</span><span>'+esc(val)+'</span></div>'; }
+
+function messageHtml(m){
+  const isUser = m.role==='user';
+  const avatar = isUser
+    ? '<div class="msg-avatar">'+(state.profile.firstName? state.profile.firstName[0].toUpperCase() : 'Y')+'</div>'
+    : '<div class="msg-avatar">'+ic('bridge',13)+'</div>';
+  const bubbleClass = 'bubble'+(m.proactive?' proactive':'');
+  let html = '<div class="msg-row '+(isUser?'user':'assistant')+'">'+avatar+'<div class="msg-col"><div class="'+bubbleClass+'">'+esc(m.content).replace(/\n/g,'<br/>')+'</div>';
+  html += '<div class="msg-meta"><span>'+fmtTime(m.time)+'</span>'+(!isUser? '<button class="copy-btn" onclick="copyMessage(\''+m.id+'\')">'+ic('copy',11)+'Copy</button>':'')+'</div>';
+  if(m.suggestAdvisor){
+    html += '<div class="advisor-suggest"><button class="btn btn-outline btn-sm" onclick="openAdvisorModal(\'message\')">'+ic('phone',12)+'Send this to my advisor</button></div>';
+  }
+  html += '</div></div>';
+  return html;
+}
+
+function scrollChatToBottom(){
+  const el = document.getElementById('chatMessages');
+  if(el) el.scrollTop = el.scrollHeight;
+}
+
+function copyMessage(id){
+  const m = state.conversation.find(x=>x.id===id);
+  if(!m) return;
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(m.content).then(()=>toast('Message copied')).catch(()=>toast('Could not copy message','alert'));
+  }
+}
+
+function clearChat(keepGreeting){
+  state.conversation = [];
+  if(keepGreeting!==false) seedConversationIfEmpty();
+  else seedConversationIfEmpty();
+  renderAssistant();
+}
+
+function askSuggested(btn){
+  const text = btn.innerText;
+  document.getElementById('chatInput').value = text;
+  sendMessage();
+}
+
+const ADVISOR_TRIGGER_RE = /(recommend|best for me|final decision|guarantee|approve|approved|am i qualified|qualif|sure i will)/i;
+
+function sendMessage(){
+  const input = document.getElementById('chatInput');
+  const text = input.value.trim();
+  if(!text) return;
+  input.value='';
+  state.conversation.push({id:uid(), role:'user', content:text, time:new Date()});
+  renderAssistant();
+  typingActive = true;
+  renderAssistant();
+  callSilta(text).then(reply=>{
+    typingActive = false;
+    state.conversation.push({id:uid(), role:'assistant', content:reply, time:new Date(), suggestAdvisor: ADVISOR_TRIGGER_RE.test(text)});
+    updateSuggestions(text);
+    renderAssistant();
+    if(state.page==='dashboard') renderDashboard();
+  }).catch(err=>{
+    console.warn('callSilta failed entirely, using local answer:', err);
+    typingActive = false;
+    let reply;
+    try { reply = localAnswer(text, searchKB(text,4)); }
+    catch(e){ reply = "I can help with mortgage questions, your documents, and your readiness score. Please try asking again, or use Contact advisor for direct help."; }
+    state.conversation.push({id:uid(), role:'assistant', content:reply, time:new Date(), suggestAdvisor: ADVISOR_TRIGGER_RE.test(text)});
+    renderAssistant();
+    if(state.page==='dashboard') renderDashboard();
+  });
+}
+
+function searchKB(query, topK){
+  topK = topK||4;
+  const q = query.toLowerCase();
+  const words = q.split(/[^a-z0-9€]+/i).filter(w=>w.length>2);
+  const scored = KB.map(item=>{
+    const hay = (item.q+' '+item.a+' '+item.t.join(' ')).toLowerCase();
+    let score=0;
+    words.forEach(w=>{ if(hay.indexOf(w)>=0) score+=1; });
+    item.t.forEach(tag=>{ if(q.indexOf(tag)>=0) score+=2; });
+    return {item,score};
+  });
+  scored.sort((a,b)=>b.score-a.score);
+  let top = scored.filter(s=>s.score>0).slice(0,topK).map(s=>s.item);
+  if(top.length===0) top = [KB[0], KB.find(k=>k.c==='platform')];
+  return top;
+}
+
+function buildContextBlock(){
+  const p = state.profile;
+  const r = computeReadiness();
+  const missing = missingRequiredDocs().map(id=>DOC_META[id].label);
+  const verified = activeDocIds().filter(docVerified);
+  let lines = [];
+  lines.push('CUSTOMER PROFILE:');
+  lines.push('- Name: '+(p.firstName? p.firstName+' '+p.lastName : 'Not provided'));
+  lines.push('- Employment status: '+(p.employmentStatus==='self_employed'?'Self-employed':'Employed')+(p.employer? ' at '+p.employer:''));
+  lines.push('- Target property value: '+(p.targetPropertyValue? fmtMoney(p.targetPropertyValue):'Not provided'));
+  lines.push('- Desired monthly payment: '+(p.desiredMonthlyPayment? fmtMoney(p.desiredMonthlyPayment):'Not provided'));
+  lines.push('- Housing preference: '+(p.housingType||'Not provided'));
+  lines.push('');
+  lines.push('EXTRACTED DOCUMENT DATA (from verified uploads only):');
+  if(verified.length===0){ lines.push('- No verified documents uploaded yet.'); }
+  verified.forEach(id=>{
+    const ex = state.documents[id].extracted;
+    lines.push('- '+DOC_META[id].label+': '+Object.entries(ex).map(([k,v])=>k+'='+v).join(', '));
+  });
+  lines.push('');
+  lines.push('APPLICATION READINESS: '+r+'% ('+applicationStatusLabel()+')');
+  lines.push('MISSING REQUIRED DOCUMENTS: '+(missing.length? missing.join(', ') : 'None'));
+  lines.push('DOCUMENTS NEEDING ATTENTION: '+(issueDocs().length? issueDocs().map(id=>DOC_META[id].label+' ('+STATUS_META[state.documents[id].status].label+')').join(', ') : 'None'));
+  return lines.join('\n');
+}
+
+async function callSilta(userText){
+  const kbMatches = searchKB(userText, 4);
+  const kbBlock = kbMatches.map(k=>'Q: '+k.q+'\nA: '+k.a).join('\n\n');
+  const systemPrompt = [
+'You are Silta, an AI mortgage assistant embedded in a Dutch mortgage origination platform. You act as a mortgage educator, application guide, and document assistant for the customer currently logged in.',
+'',
+'You operate on a hybrid AI + human model: you handle education, guidance, document-readiness tracking and general application support. A human mortgage advisor always handles final review, validation, compliance and any final mortgage recommendation. Make this division clear whenever relevant.',
+'',
+'SAFETY RULES — follow these strictly:',
+'- Never guarantee mortgage approval, claim affordability certainty, or claim the customer is "qualified".',
+'- Never provide final mortgage advice or replace the mortgage advisor.',
+'- When discussing affordability, eligibility or recommendations, use grounding language such as "Based on the information currently available…", "This may indicate…", "A mortgage advisor will validate…", or "This is guidance rather than formal mortgage advice…".',
+'- Always reference the customer\'s actual uploaded information when available, and be explicit when information is missing rather than inventing it.',
+'- If the customer has no relevant documents uploaded for a question about affordability or readiness, say you do not have enough information yet and explain what would help.',
+'- If the customer expresses anxiety or worry about approval, be reassuring and factual without making promises — note that many applications require additional review and that this is normal.',
+'- Keep responses concise and conversational (roughly 2-5 sentences) unless the question genuinely requires more detail.',
+'- Do not use markdown formatting like asterisks or headers; write in plain conversational prose suitable for a chat bubble.',
+'',
+'RELEVANT MORTGAGE KNOWLEDGE BASE ENTRIES (use these as grounding, paraphrase naturally, do not just repeat them verbatim):',
+kbBlock,
+'',
+buildContextBlock()
+].join('\n');
+
+  const history = state.conversation.slice(-10).filter(m=>!m.proactive).map(m=>({role:m.role, content:m.content}));
+  history.push({role:'user', content:userText});
+
+  const key = (state.apiKey||'').trim();
+
+  // 1) If the user supplied an OpenAI key, use the OpenAI Chat Completions API.
+  if(key.startsWith('sk-')){
+    try{
+      const resp = await fetch('https://api.openai.com/v1/chat/completions', {
+        method:'POST',
+        headers:{'Content-Type':'application/json', 'Authorization':'Bearer '+key},
+        body: JSON.stringify({
+          model: state.aiModel || 'gpt-4o-mini',
+          max_tokens: 600,
+          temperature: 0.5,
+          messages: [{role:'system', content:systemPrompt}, ...history]
+        })
+      });
+      if(!resp.ok){ const e = await resp.json().catch(()=>({})); throw new Error((e.error&&e.error.message)||('OpenAI error '+resp.status)); }
+      const data = await resp.json();
+      const out = data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content;
+      if(out) return out.trim();
+      throw new Error('Empty response from OpenAI');
+    }catch(err){
+      console.warn('OpenAI call failed, using local answer:', err);
+    }
+  }
+
+  // 2) Try the Anthropic endpoint (works inside the claude.ai artifact preview).
+  try{
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ model:'claude-sonnet-4-6', max_tokens:1000, system: systemPrompt, messages: history })
+    });
+    if(resp.ok){
+      const data = await resp.json();
+      if(data && data.content){
+        const out = data.content.map(b=>b.text||'').filter(Boolean).join('\n').trim();
+        if(out) return out;
+      }
+    }
+  }catch(err){
+    console.warn('Anthropic endpoint unavailable (expected outside claude.ai); using local answer.');
+  }
+
+  // 3) Always-works fallback: grounded local answer from KB + profile/documents.
+  return localAnswer(userText, kbMatches);
+}
+
+// Generate a helpful, grounded reply with no external API — keeps the demo
+// working anywhere (GitHub Pages, opened file, offline). Uses the same KB + context.
+function localAnswer(userText, kbMatches){
+  const q = userText.toLowerCase();
+  const r = computeReadiness();
+  const missing = missingRequiredDocs().map(id=>DOC_META[id].label);
+  const verified = activeDocIds().filter(docVerified).map(id=>DOC_META[id].label);
+
+  function extractedValue(docId, field){
+    const d = state.documents[docId];
+    return d && d.extracted && d.extracted[field] ? d.extracted[field] : null;
+  }
+  const income = extractedValue('salary_slips','Monthly Income') || extractedValue('employment_contract','Monthly Income');
+  const savings = extractedValue('savings_statement','Savings Balance');
+
+  if(/missing|still need|what.*(documents|docs)|readiness|ready|how far|complete/.test(q)){
+    let msg = 'Based on the information currently available, your application readiness is '+r+'%. ';
+    if(verified.length) msg += 'You have verified: '+verified.join(', ')+'. ';
+    if(missing.length) msg += 'Still required: '+missing.join(', ')+'. ';
+    else msg += 'All required documents have been uploaded. ';
+    msg += 'A mortgage advisor will validate everything before any final decision.';
+    return msg;
+  }
+
+  if(/afford|how much.*(borrow|mortgage)|can i buy|budget|350|400|house price|property value/.test(q)){
+    if(!income){
+      return 'I currently do not have enough information to give you personalised affordability guidance. If you upload your income and financial documents, I can give a more tailored picture. As a general rule, lenders look at roughly 4 to 5.5 times your gross annual income, but a mortgage advisor will validate your full situation before any figure is confirmed.';
+    }
+    let msg = 'Based on the information currently available — a monthly income of '+income+(savings?(' and savings of '+savings):'')+' — this may be within a realistic range for many lenders. ';
+    msg += 'However, affordability depends on additional factors such as existing debt, interest rates, employment stability and lender requirements. This is guidance rather than formal mortgage advice, and a mortgage advisor will validate your complete financial situation.';
+    return msg;
+  }
+
+  if(/which.*(mortgage|fits|suit|better|recommend)|annuity or linear|should i (choose|pick|take)/.test(q)){
+    let msg = 'An annuity mortgage keeps monthly payments relatively stable, while a linear mortgage starts higher and decreases over time, with less total interest paid overall. ';
+    if(income) msg += 'Based on your uploaded income information'+(docVerified('employment_contract')?' and stable employment contract':'')+', an annuity mortgage may offer more predictable monthly costs. ';
+    msg += 'This is guidance rather than formal mortgage advice — a mortgage advisor will review your complete financial situation before any final recommendation is made.';
+    return msg;
+  }
+
+  if(/worried|anxious|scared|afraid|stress|won.?t get|reject|nervous|will i be approved/.test(q)){
+    let msg = 'It is completely normal to feel that way — many applications require additional review before a decision can be made, and that does not mean anything is wrong. ';
+    msg += 'Based on your current profile, your application appears to be progressing normally'+(r>=50?', and your readiness score of '+r+'% is a good sign':'')+'. ';
+    msg += 'Your mortgage advisor is there to support you through the parts that need a human eye.';
+    return msg;
+  }
+
+  if(/advisor|human|speak to someone|call|callback|contact/.test(q)){
+    return 'You can reach your assigned advisor, '+state.advisor.name+', any time using the Contact advisor button. They handle final review, validation, and any formal mortgage recommendation. Would you like to send them a message or request a callback?';
+  }
+
+  if(kbMatches && kbMatches.length){
+    const top = kbMatches[0];
+    let msg = top.a;
+    if(kbMatches[1] && kbMatches[1].c===top.c){ msg += ' '+kbMatches[1].a; }
+    msg += ' If you would like, a mortgage advisor can go into more detail for your specific situation.';
+    return msg;
+  }
+
+  return 'I can help with mortgage concepts, your required documents, your readiness score, and general affordability guidance. Try asking me something like "what documents am I missing?" or "what is the difference between annuity and linear mortgages?" A mortgage advisor is also available any time for anything that needs a human eye.';
+}
+
+const SUGGESTION_POOL = {
+  basics:["What is NHG and how does it work?","What does loan-to-value mean?","What's the difference between gross and net mortgage cost?"],
+  products:["What's the difference between annuity and linear mortgages?","What is a fixed interest rate period?","Can I combine different mortgage types?"],
+  process:["What happens during advisor review?","How long does the mortgage process usually take?","What does the AI review actually check?"],
+  documents:["What documents am I still missing?","How recent do my bank statements need to be?","What documents do self-employed applicants need?"],
+  affordability:["Can I afford my target property?","How does existing debt affect affordability?","What should I do next to improve my readiness score?"],
+  platform:["What does my readiness score mean?","Can the AI approve my mortgage?","When should I contact my advisor directly?"]
+};
+function updateSuggestions(lastText){
+  const matches = searchKB(lastText,2);
+  const cats = Array.from(new Set(matches.map(m=>m.c)));
+  let pool = [];
+  cats.forEach(c=>{ if(SUGGESTION_POOL[c]) pool = pool.concat(SUGGESTION_POOL[c]); });
+  if(pool.length<3){ Object.values(SUGGESTION_POOL).forEach(arr=>pool=pool.concat(arr)); }
+  pool = Array.from(new Set(pool)).filter(p=>p.toLowerCase()!==lastText.toLowerCase());
+  state.suggestions = pool.slice(0,4);
+}
+
+/* =========================================================================
+   ADVISOR CONTACT
+   ========================================================================= */
+function openAdvisorModal(prefill){
+  const root = document.getElementById('modalRoot');
+  const defaults = {
+    message:'I would like to discuss my mortgage options.',
+    callback:'Could you call me back to discuss my application?',
+    help:'I would like some human assistance with my application.'
+  };
+  const initial = defaults[prefill] || '';
+  root.innerHTML = '<div class="modal-overlay" onclick="if(event.target===this) closeModal()">'
+   +'<div class="modal" style="position:relative;">'
+   +'<button class="modal-close btn btn-ghost btn-sm" onclick="closeModal()">'+ic('x',15)+'</button>'
+   +'<div class="modal-title">'+ic('phone',18)+'Contact Your Advisor</div>'
+   +'<div class="modal-sub">Send a message, request a callback, or ask for human assistance. '+state.advisor.name+' will follow up.</div>'
+   +'<textarea id="advisorMsg" placeholder="Type your message…">'+esc(initial)+'</textarea>'
+   +'<div class="modal-actions">'
+   +'<button class="btn btn-primary" onclick="submitAdvisorContact(\'message\')">'+ic('send',14)+'Send message</button>'
+   +'<button class="btn btn-outline" onclick="submitAdvisorContact(\'callback\')">'+ic('phone',14)+'Request callback</button>'
+   +'<button class="btn btn-outline" onclick="submitAdvisorContact(\'help\')">'+ic('user',14)+'Ask for human help</button>'
+   +'</div></div></div>';
+}
+function closeModal(){ document.getElementById('modalRoot').innerHTML=''; }
+
+function openAISettings(){
+  const root = document.getElementById('modalRoot');
+  const connected = (state.apiKey||'').trim().startsWith('sk-');
+  root.innerHTML = '<div class="modal-overlay" onclick="if(event.target===this) closeModal()">'
+   +'<div class="modal" style="position:relative; max-width:480px;">'
+   +'<button class="modal-close btn btn-ghost btn-sm" onclick="closeModal()">'+ic('x',15)+'</button>'
+   +'<div class="modal-title">'+ic('sparkle',18)+'AI Assistant Settings</div>'
+   +'<div class="modal-sub">The assistant works out of the box using Silta\'s built-in mortgage knowledge base. For richer, fully conversational answers, you can connect your own OpenAI API key — it is stored only in this browser session and never sent anywhere except OpenAI.</div>'
+   +'<div class="field" style="margin-bottom:12px;"><label>OpenAI API key</label>'
+   +'<input id="aiKeyInput" type="password" placeholder="sk-..." value="'+esc(state.apiKey||'')+'" style="border:1px solid var(--gray-300); border-radius:9px; padding:10px 12px; font-size:13px;" /></div>'
+   +'<div class="field" style="margin-bottom:4px;"><label>Model</label>'
+   +'<select id="aiModelInput" style="border:1px solid var(--gray-300); border-radius:9px; padding:10px 12px; font-size:13px;">'
+   +['gpt-4o-mini','gpt-4o','gpt-4-turbo'].map(m=>'<option value="'+m+'" '+(state.aiModel===m?'selected':'')+'>'+m+'</option>').join('')
+   +'</select></div>'
+   +'<div style="font-size:11.5px; color:var(--gray-500); margin-top:10px; line-height:1.5;">'+ic('shield',12)+' Status: '+(connected?'<span style="color:var(--green-600); font-weight:700;">Key connected</span>':'Using built-in knowledge base (no key)')+'. Without a key, Silta still answers using its mortgage knowledge base and your document context.</div>'
+   +'<div class="modal-actions">'
+   +'<button class="btn btn-primary" onclick="saveAISettings()">'+ic('checkSm',14)+'Save</button>'
+   +(connected?'<button class="btn btn-outline" onclick="clearAIKey()">Remove key</button>':'')
+   +'</div></div></div>';
+}
+function saveAISettings(){
+  const k = document.getElementById('aiKeyInput'); const m = document.getElementById('aiModelInput');
+  if(k) state.apiKey = k.value.trim();
+  if(m) state.aiModel = m.value;
+  closeModal();
+  toast(state.apiKey.startsWith('sk-')? 'AI key connected' : 'Settings saved');
+}
+function clearAIKey(){ state.apiKey=''; closeModal(); toast('API key removed'); }
+
+
+function submitAdvisorContact(type){
+  const ta = document.getElementById('advisorMsg');
+  const text = (ta && ta.value.trim()) || (type==='callback'?'Could you call me back to discuss my application?':type==='help'?'I would like some human assistance with my application.':'I would like to discuss my mortgage options.');
+  const entry = {id:uid(), type, text, status:'Sent', time:new Date()};
+  state.advisorMessages.unshift(entry);
+  closeModal();
+  toast(type==='callback'? 'Callback requested' : type==='help' ? 'Request sent to your advisor' : 'Message sent to your advisor', 'checkSm');
+  pushInsight('You contacted '+state.advisor.name+': "'+text+'"');
+  setTimeout(()=>{ entry.status='Received by advisor'; }, 4000);
+  if(state.page==='dashboard') renderDashboard();
+}
+
+function requestAdvisorReview(){
+  state.advisorReviewRequested = true;
+  pushProactive('Your application has been sent for advisor review. '+state.advisor.name+' will reach out if anything further is needed.');
+  toast('Advisor review requested');
+  renderAll();
+}
+
+/* =========================================================================
+   INIT
+   ========================================================================= */
+function init(){
+  renderAll();
+}
+init();
+</script>
+</body>
+</html>
