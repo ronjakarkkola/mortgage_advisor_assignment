@@ -1,222 +1,222 @@
-<div align="center">
+ Silta
 
-# 🌉 Silta
+### AI agent
 
-### Bridging AI efficiency and human mortgage guidance
+This project was built using Claude as the primary AI coding agent.
 
-**An AI-assisted mortgage origination platform that improves the mortgage customer journey through conversational AI, intelligent document analysis, and real-time application readiness tracking.**
+### Anthropic API
 
-[Features](#-features) · [Quick Start](#-quick-start) · [Demo Walkthrough](#-demo-walkthrough) · [Architecture](#-architecture) · [AI Agents](#-ai-agent-orchestration)
+Ideally, this project should be used with an API key, as this allows the AI assistant to answer a much wider range of questions. Without an API key, its responses are limited. At the moment, the AI chat can answer questions about uploaded documents and some general mortgage-related questions. In a real-world application, it would be further developed so that it can answer a wider range of customer questions. We tried the AI chat with a connection to Anthropic API and without one as well, 
+but of course, the one with a connection is able to respond better.
 
-</div>
+### Agent Instructions
 
----
+## Project Overview
 
-> **Silta** means *bridge* in Finnish — the platform bridges the gap between fast, scalable AI guidance and trusted, regulated human mortgage advice.
+Silta is an AI-assisted mortgage origination platform built as a university MVP.
 
-## 🎯 The Problem
+The goal is to demonstrate how AI can improve the mortgage customer journey through:
 
-Mortgage origination is still highly manual and slow. **Customers** wait for callbacks, struggle with terminology, upload the wrong documents, and have no visibility into where their application stands. **Mortgage advisors** spend the majority of their time answering repetitive questions and chasing paperwork — instead of giving high-value advice on complex situations.
+- Intelligent document uploads
+- Personalized mortgage guidance
+- Conversational AI
+- Application readiness tracking
+- Human advisor collaboration
 
-## 💡 The Solution
+This is a customer facing app only.
 
-Silta runs on a deliberate **hybrid AI–human model**:
+# Project Structure
 
-| AI handles | Humans handle |
-|------------|---------------|
-| Mortgage education & guidance | Final review & validation |
-| Document completeness checks | Regulatory compliance |
-| Application readiness tracking | Complex personal situations |
-| Answering common questions 24/7 | The formal mortgage recommendation |
+The primary deliverable is one app called Silta, but it only shows the customer side. The customer side also requires mock data.
 
-The AI never replaces the advisor — it prepares a complete, verified application so the advisor can focus on what genuinely needs human expertise.
+# Application Pages
 
----
+**Dashboard**
 
-## ✨ Features
+Provides an overview of the mortgage application, readiness score, uploaded documents, missing documents, AI insights and recommended next steps.
 
-### 🏠 Mortgage Dashboard
-A real banking-portal-style overview: a live **Mortgage Readiness Score** (0–100%), a six-step application progress tracker, document summaries, recent AI insights, your assigned advisor, and the dynamic **"Your Next Steps"** panel that updates after every action.
+**Document Center**
 
-### 📁 Intelligent Document Center
-- Upload one or more files per document type (e.g. three months of salary slips)
-- **Real content analysis** — Silta reads the actual text of uploaded PDFs (via PDF.js), recognises the document type, and extracts the relevant figures (income, employer, balances, IBANs, dates)
-- **Automatic verification verdicts** decided from content, not a toggle: `Verified`, `Wrong document`, `Outdated`, `Needs Review`, `Unreadable`, `Unsupported`
-- Detects when the wrong document is uploaded (e.g. a rental agreement in the income field) and never fabricates figures it cannot read
-- Self-employed flow swaps salary documents for annual accounts, tax returns and business financials
+Allows customers to upload mortgage documents, review verification status and view extracted financial information.
 
-### 💬 AI Mortgage Assistant *(centrepiece)*
-- Grounded answers built from a **60-entry mortgage knowledge base** + your profile + your verified document data (a retrieval-augmented approach)
-- Works **out of the box** with the built-in knowledge engine — no API key required
-- Optionally connect your **own OpenAI API key** (via *AI settings*) for fully generative answers
-- Conversation memory, typing indicator, suggested follow-ups, copy / new chat / clear chat
-- Strict safety rules: never guarantees approval, always defers final advice to the advisor
-- Proactively suggests contacting an advisor when a question needs a human
+**AI Assistant**
 
-### 👤 Profile & Advisor Contact
-A profile that feeds personalisation (employment status dynamically changes required documents), plus a simulated advisor contact flow (message / callback / human assistance).
+The primary feature of the application. Provides mortgage guidance, answers customer questions and personalizes responses using uploaded documents.
 
----
+**Profile**
 
-## 🚀 Quick Start
+Contains personal information, employment information and mortgage preferences used to personalize AI responses.
 
-Silta's MVP is a **single self-contained HTML file** — no build step, no dependencies, no server.
 
-### Option 1 — Just open it
-```bash
-# Clone the repo
-git clone https://github.com/<your-username>/silta.git
-cd silta
+# Core Features
 
-# Open the app in your browser
-open index.html        # macOS
-# or: xdg-open index.html   (Linux) / start index.html (Windows)
-```
+**Dashboard**
 
-### Option 2 — Serve locally (recommended for the AI document reader)
-```bash
-python3 -m http.server 8080
-# then visit http://localhost:8080
-```
+Display:
 
-> **Note:** The document reader uses [PDF.js](https://mozilla.github.io/pdf.js/) loaded from a CDN, so open the app **with an internet connection** and upload **text-based PDFs** (like the files in [`demo-documents/`](./demo-documents)) for automatic content extraction. Image-only scans are honestly flagged for manual review rather than guessed.
+- Mortgage Readiness Score
+- Progress Tracker
+- Uploaded Documents
+- Missing Documents
+- AI Insights
+- Recommended Next Steps
 
-### Connecting your own AI key (optional)
-Open the **AI Assistant → AI settings** and paste an OpenAI API key (`sk-...`). It is held only in the browser session. Without a key, the assistant still answers using the built-in knowledge base.
+**Document Upload**
 
----
+Allow customers to upload:
 
-## 🎬 Demo Walkthrough
+- Salary Slips
+- Employment Contract
+- Bank Statements
+- Savings Statement
+- Identity Documents
+- Debt Documents
 
-Sample demo documents for a fictional customer, **Dylan Verhoeven**, are in [`demo-documents/`](./demo-documents).
+After upload, simulate document analysis by extracting:
 
-1. **Dashboard** — note the readiness score and "Your Next Steps".
-2. **Documents → Salary Slips** — upload the three `salary_slip_*.pdf` files. Silta reads them, confirms the type, extracts €4,250 income, and the score rises.
-3. **Documents → Bank Statements** — upload `WRONG_vacation_booking_ibiza.pdf`. Silta correctly rejects it as *Not Relevant* and extracts nothing.
-4. **Documents** — finish uploading `bank_statement_*.pdf`, `savings_statement_*.pdf`, `passport_*.pdf`.
-5. **AI Assistant** — ask *"What documents am I still missing?"*, *"Can I afford a €350,000 home?"*, *"Which mortgage fits me?"* — answers reference your real data.
-6. **Profile** — toggle to *Self-employed* and watch the required documents change.
-7. **Contact advisor** — send a message and see the simulated status update.
+- Monthly Income
+- Employer
+- Employment Type
+- Savings
+- Student Debt
+- Other Liabilities
 
-A full video script is in [`docs/DEMO_SCRIPT.md`](./docs/DEMO_SCRIPT.md).
+Each document should receive one of the following statuses:
 
----
+- Verified
+- Missing
+- Outdated
+- Duplicate
+- Incomplete
+- Needs Review
+- Unreadable
 
-## 🏗 Architecture
 
-```
-┌──────────────────────────────────────────────────────────┐
-│                      Silta (browser)                      │
-│                                                           │
-│   Dashboard    Documents    AI Assistant    Profile       │
-│   ───────────────────────────────────────────────────     │
-│                  Central app state                        │
-│   ───────────────────────────────────────────────────     │
-│                                                           │
-│   Readiness Engine        Document Analysis Engine        │
-│   • computeReadiness()    • PDF.js text extraction        │
-│   • nextSteps()           • content classifier (verdict)  │
-│   • progressSteps()       • field parser (income, IBAN…)  │
-│                                                           │
-│   AI Service (RAG)                                         │
-│   • searchKB()  → retrieve from 60-entry knowledge base   │
-│   • buildContextBlock() → profile + verified documents    │
-│   • callSilta() → OpenAI key ▸ Anthropic ▸ local answer   │
-└──────────────────────────────────────────────────────────┘
-                            │ (optional)
-                   ┌────────┴─────────┐
-                   │  OpenAI API      │  ← only if user supplies a key
-                   └──────────────────┘
-```
+**AI Mortgage Assistant**
 
-Full detail in [`docs/ARCHITECTURE.md`](./docs/ARCHITECTURE.md).
+The AI should:
 
-### How the AI decides a document's status
-1. Read the PDF text with PDF.js.
-2. Score the text against keyword *fingerprints* for every document type.
-3. If it clearly matches a **different** type → `Wrong document`. If it matches **this** slot → `Verified` (+ extract fields). If unreadable → honest `Needs Review`/`Unreadable` (never invents data).
+- Explain mortgage concepts
+- Answer customer questions
+- Reference uploaded documents
+- Explain missing documents
+- Track application progress
+- Guide the customer through the mortgage journey
 
----
+The AI should remember previous messages during the session.
 
-## 🛠 Tech Stack
+# Mortgage Readiness
 
-| Concern | Choice | Why |
-|---------|--------|-----|
-| App shell | **Vanilla JS + HTML + CSS**, single file | Zero-install demo; opens anywhere |
-| Document AI | **PDF.js** (client-side) | Real text extraction with no backend |
-| Knowledge base | **Structured JSON** (60 FAQs) | Transparent, auditable retrieval |
-| Generative AI | **OpenAI API** (optional) + local fallback | Works with or without a key |
-| Design system | Custom CSS tokens (navy / green / grey) | Trustworthy banking aesthetic |
-| Demo documents | **Python + ReportLab** | Reproducible, realistic test data |
+Calculate a readiness score between 0-100%
 
-A production-oriented **React + TypeScript + Tailwind + Vite** reference implementation of the same modules lives in [`react-reference/`](./react-reference).
+The score should increase as customers:
+
+- Complete their profile
+- Upload required documents
+- Resolve document issues
+
+The score should always be recalculated from the current application state.
+
+# AI Context
+
+Every AI response should consider:
+
+- Mortgage knowledge base
+- Uploaded documents
+- Customer profile
+- Readiness score
+- Missing documents
+- Previous conversation history
+
+Responses should feel personalized rather than generic.
+
+# AI Safety
+
+The AI must not:
+
+- Guarantee mortgage approval
+- Provide regulated mortgage advice
+- Replace a mortgage advisor
+
+Instead use phrases such as:
+
+> "Based on the information currently available..."
+
+> "This may indicate..."
+
+> "A mortgage advisor will validate this before any final recommendation."
 
 ---
 
-## 📂 Project Structure
+# Development Principles
 
-```
-silta/
-├── index.html                  # ← the complete MVP (open this)
-├── README.md
-├── LICENSE
-├── CLAUDE.md  CODEX.md  GEMINI.md  AGENTS.md   # agent instructions
-├── .claude/ .codex/ .gemini/ .agents/          # agent config
-├── docs/
-│   ├── ARCHITECTURE.md
-│   ├── DEMO_SCRIPT.md
-│   └── KNOWLEDGE_BASE.md
-├── demo-documents/             # realistic sample PDFs for the demo
-├── scripts/
-│   └── generate_demo_documents.py
-└── react-reference/            # production-style React/TS implementation
-```
+**Focus on UX**
 
----
+The application should feel polished, intuitive and trustworthy.
 
-## 🤖 AI Agent Orchestration
+**Prioritize readability**
 
-This project was developed using **Claude (Anthropic)** as the primary AI coding agent. Agent instruction files are provided for four ecosystems so any tool can pick up the project:
+Write clean, maintainable code that is easy to understand.
 
-| File | Agent |
-|------|-------|
-| [`CLAUDE.md`](./CLAUDE.md) + [`.claude/`](./.claude) | Claude / Claude Code |
-| [`CODEX.md`](./CODEX.md) + [`.codex/`](./.codex) | OpenAI Codex / Cursor |
-| [`GEMINI.md`](./GEMINI.md) + [`.gemini/`](./.gemini) | Google Gemini |
-| [`AGENTS.md`](./AGENTS.md) + [`.agents/`](./.agents) | Generic / multi-agent |
+**AI First**
 
-**Why Claude?** Long-context comprehension of the full spec in one pass, strong native Dutch-mortgage domain knowledge (NHG, DUO, notary, hypotheekrenteaftrek), high-quality single-file vanilla JS without scaffolding, and reliable self-correction of bugs during the build. See [`AGENTS.md`](./AGENTS.md) for the orchestration model.
+The AI assistant should feel like the central feature of the platform, not an afterthought.
 
----
+**Document Intelligence**
 
-## 📈 Scaling, Risks & Security
+Uploaded documents should directly influence AI responses and the readiness score.
 
-**To scale out:** replace client-side PDF.js with a server-side OCR/document-AI service (Azure Document Intelligence, AWS Textract) for scanned documents; add bank-grade auth (iDIN, MFA); move state to an encrypted database; cache common AI answers to control cost; add a per-lender affordability rule engine.
+**Customer Guidance**
 
-**Technical risks:** LLM hallucination (mitigated by strict grounding + safety prompts + advisor-in-the-loop); document-model drift as lender rules change; client-side extraction limited to text PDFs.
+The customer should always know:
 
-**Security:** documents stay in-session in the MVP; production requires encryption at rest/in transit, GDPR-compliant EU data residency, PII minimisation before any LLM call, and prompt-injection hardening. See [`docs/ARCHITECTURE.md`](./docs/ARCHITECTURE.md#security).
+- Where they are in the process
+- What documents are missing
+- What they should do next
 
----
+## Features
 
-## 🗺 Roadmap
+### Mortgage Dashboard
+- **Readiness Score** (0–100%) — live-calculated from profile completeness + verified documents
+- **Application Progress** — 6-step tracker from start to final offer
+- **Your Next Steps** — dynamic action panel that auto-updates after every upload, verification, or profile change
+- **Document Overview** — verified/missing/issue counts at a glance
+- **AI Insights Feed** — proactive messages from Silta after each document event
+- **Advisor Card** — direct access to your assigned mortgage advisor
 
-- [ ] Server-side OCR for scanned documents
-- [ ] PSD2 open-banking for auto-verified statements
-- [ ] Multi-lender affordability calculator
-- [ ] Dutch / English language toggle
-- [ ] Advisor-side dashboard (out of MVP scope)
+###  Document Center
+- Upload support for all required Dutch mortgage documents
+- **AI analysis simulation** with realistic extracted data (income, employer, savings, debt)
+- Document statuses: Verified · Missing · Outdated · Duplicate · Incomplete · Unreadable · Needs Review · Wrong document · Unsupported format
+- **Edge case detection**: wrong document type (rental agreements, utility bills, etc.), conflicting income figures between salary slip and employment contract
+- Self-employed document flow (annual accounts, tax returns, business financials)
+- Demo scenario selector for every document slot
 
----
+### AI Mortgage Assistant 
+- Every response grounded in: customer profile + verified document data + readiness score + missing docs
+- Full conversation memory (session), timestamps, typing indicator
+- Suggested follow-up chips that update based on conversation topic
+- Copy message button, New conversation, Clear chat
+- Context panel: live view of what the AI knows about you
+- Always requires advisor approval
+- "Send this to my advisor" trigger on advice-seeking questions
 
-## 📄 License
+### Profile
+- Personal, employment and mortgage goals
+- Employed / Self-employed toggle → dynamically changes required document list
+- Saves to state → immediately re-scores readiness
 
-Released under the [MIT License](./LICENSE).
+### Advisor Contact
+- Send message · Request callback · Ask for human assistance
+- Simulated send/receive flow with status updates
+- Advisor modal accessible from every page
 
-Demo documents and the customer "Dylan Verhoeven" are entirely fictional and for demonstration only.
 
----
+## Installation
 
-<div align="center">
-Built with <a href="https://claude.ai">Claude</a> · Dutch mortgage domain modelled on AFM / NHG / DUO public guidance
-</div>
+## Running Locally
+
+### Quick start
+1. Open `silta.html` in your browser
+2. The app loads with no demo data filled yet
+
