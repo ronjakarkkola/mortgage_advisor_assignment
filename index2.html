@@ -1,0 +1,1124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Silta — Advisor Dashboard</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --navy:#0F1B2D;--navy-mid:#1A2E45;--navy-light:#243650;
+  --green:#22C55E;--green-dim:#16A34A;--green-pale:#DCFCE7;
+  --blue:#3B82F6;--blue-pale:#EFF6FF;--blue-dim:#1D4ED8;
+  --slate:#64748B;--slate-light:#94A3B8;
+  --red:#EF4444;--red-pale:#FEF2F2;
+  --amber:#F59E0B;--amber-pale:#FFFBEB;
+  --white:#FFFFFF;--surface:#F8FAFC;--border:#E2E8F0;
+  --text:#0F172A;--text-mid:#475569;
+}
+body{font-family:'Inter',sans-serif;background:var(--surface);color:var(--text);min-height:100vh;}
+
+/* NAV */
+.topnav{background:var(--navy);padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;}
+.topnav-logo{display:flex;align-items:center;gap:10px;}
+.logo-icon{width:32px;height:32px;background:var(--green);border-radius:8px;display:flex;align-items:center;justify-content:center;}
+.logo-icon svg{width:18px;height:18px;}
+.logo-text{color:#fff;font-weight:700;font-size:15px;letter-spacing:-.3px;}
+.logo-badge{color:var(--green);font-size:11px;font-weight:500;background:rgba(34,197,94,.12);padding:2px 7px;border-radius:99px;margin-left:6px;}
+.topnav-right{display:flex;align-items:center;gap:12px;}
+.nav-avatar{width:32px;height:32px;background:var(--navy-light);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--slate-light);font-size:13px;font-weight:600;border:2px solid var(--navy-light);cursor:pointer;}
+
+/* LAYOUT */
+.layout{display:flex;min-height:calc(100vh - 56px);}
+.sidebar{width:220px;background:#fff;border-right:1px solid var(--border);padding:20px 0;flex-shrink:0;}
+.sidebar-section{margin-bottom:24px;}
+.sidebar-label{font-size:10px;font-weight:600;color:var(--slate-light);letter-spacing:.08em;text-transform:uppercase;padding:0 16px 8px;}
+.sidebar-item{display:flex;align-items:center;gap:10px;padding:8px 16px;cursor:pointer;font-size:13.5px;font-weight:500;color:var(--text-mid);border-left:3px solid transparent;transition:all .15s;}
+.sidebar-item:hover{color:var(--text);background:var(--surface);}
+.sidebar-item.active{color:var(--navy);border-left-color:var(--green);background:var(--green-pale);font-weight:600;}
+.sidebar-item svg{width:16px;height:16px;flex-shrink:0;}
+.sidebar-count{margin-left:auto;background:var(--red);color:#fff;font-size:10px;font-weight:700;padding:1px 6px;border-radius:99px;}
+.sidebar-count.amber{background:var(--amber);}
+.sidebar-count.green{background:var(--green);}
+
+/* VIEWS */
+.view{display:none;}.view.active{display:block;}
+.main{flex:1;padding:28px 32px;overflow:auto;}
+
+/* BREADCRUMB */
+.breadcrumb{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--slate);margin-bottom:20px;}
+.breadcrumb a{color:var(--blue);cursor:pointer;text-decoration:none;font-weight:500;}
+.breadcrumb a:hover{text-decoration:underline;}
+.breadcrumb svg{width:12px;height:12px;}
+
+/* PAGE HEADER */
+.page-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:24px;}
+.page-title{font-size:22px;font-weight:700;color:var(--navy);letter-spacing:-.4px;}
+.page-sub{font-size:13px;color:var(--slate);margin-top:3px;}
+.header-actions{display:flex;gap:10px;}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;border:none;transition:all .15s;}
+.btn-primary{background:var(--navy);color:#fff;}
+.btn-primary:hover{background:var(--navy-mid);}
+.btn-outline{background:#fff;color:var(--text);border:1px solid var(--border);}
+.btn-outline:hover{background:var(--surface);}
+.btn svg{width:14px;height:14px;}
+
+/* STATS */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:28px;}
+.stat-card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 18px;}
+.stat-label{font-size:11.5px;font-weight:500;color:var(--slate);margin-bottom:6px;}
+.stat-value{font-size:26px;font-weight:700;color:var(--navy);letter-spacing:-.5px;}
+.stat-delta{font-size:11.5px;color:var(--green-dim);font-weight:500;margin-top:3px;}
+.stat-delta.warn{color:var(--amber);}
+.stat-delta.bad{color:var(--red);}
+
+/* FILTER */
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+.section-title{font-size:14px;font-weight:700;color:var(--navy);}
+.filter-row{display:flex;gap:8px;flex-wrap:wrap;}
+.filter-chip{padding:4px 12px;border-radius:99px;font-size:12px;font-weight:500;cursor:pointer;border:1px solid var(--border);background:#fff;color:var(--text-mid);transition:all .15s;}
+.filter-chip.active{background:var(--navy);color:#fff;border-color:var(--navy);}
+.filter-chip:hover:not(.active){border-color:var(--slate);color:var(--text);}
+
+/* SEARCH */
+.search-wrap{background:#fff;border:1px solid var(--border);border-radius:8px;display:flex;align-items:center;gap:8px;padding:7px 12px;margin-bottom:16px;}
+.search-wrap svg{width:15px;height:15px;color:var(--slate-light);flex-shrink:0;}
+.search-wrap input{border:none;outline:none;background:transparent;font-size:13px;color:var(--text);width:100%;font-family:inherit;}
+.search-wrap input::placeholder{color:var(--slate-light);}
+
+/* QUEUE CARDS */
+.queue-card{background:#fff;border:1px solid var(--border);border-radius:14px;margin-bottom:12px;overflow:hidden;cursor:pointer;transition:box-shadow .15s,border-color .15s;}
+.queue-card:hover{box-shadow:0 4px 16px rgba(0,0,0,.08);border-color:var(--slate-light);}
+.queue-card.hidden{display:none;}
+.risk-ribbon{height:4px;width:100%;}
+.risk-ribbon.high{background:var(--red);}
+.risk-ribbon.medium{background:var(--amber);}
+.risk-ribbon.low{background:var(--green);}
+.queue-card-body{padding:14px 18px;display:flex;align-items:center;gap:14px;}
+.customer-avatar{width:40px;height:40px;border-radius:50%;color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex-shrink:0;}
+.queue-info{flex:1;min-width:0;}
+.queue-name{font-size:14px;font-weight:700;color:var(--navy);}
+.queue-meta{font-size:12px;color:var(--slate);margin-top:2px;}
+.queue-chips{display:flex;gap:6px;margin-top:7px;flex-wrap:wrap;}
+.status-chip{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:99px;font-size:11.5px;font-weight:600;}
+.status-chip.green{background:var(--green-pale);color:var(--green-dim);}
+.status-chip.amber{background:var(--amber-pale);color:#92400E;}
+.status-chip.red{background:var(--red-pale);color:#991B1B;}
+.status-chip.blue{background:var(--blue-pale);color:var(--blue-dim);}
+.status-chip.gray{background:var(--surface);color:var(--slate);}
+.status-dot{width:6px;height:6px;border-radius:50%;background:currentColor;}
+.queue-readiness{text-align:right;flex-shrink:0;}
+.q-pct{font-size:18px;font-weight:700;color:var(--navy);}
+.q-sub{font-size:11px;color:var(--slate);}
+.queue-open-btn{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:6px 14px;font-size:12px;font-weight:600;color:var(--navy);cursor:pointer;display:flex;align-items:center;gap:5px;white-space:nowrap;margin-left:10px;}
+.queue-open-btn:hover{background:var(--navy);color:#fff;}
+.queue-open-btn svg{width:13px;height:13px;}
+
+/* ── CASE DETAIL VIEW ── */
+.case-header{background:#fff;border:1px solid var(--border);border-radius:14px;padding:20px 24px;margin-bottom:16px;}
+.case-header-top{display:flex;align-items:flex-start;gap:16px;}
+.case-avatar{width:52px;height:52px;border-radius:12px;color:#fff;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;flex-shrink:0;}
+.case-name{font-size:20px;font-weight:700;color:var(--navy);letter-spacing:-.3px;}
+.case-meta{font-size:13px;color:var(--slate);margin-top:3px;}
+.case-chips{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;}
+.case-readiness{margin-left:auto;text-align:center;}
+.ring-svg{width:56px;height:56px;transform:rotate(-90deg);}
+.ring-bg{fill:none;stroke:var(--border);stroke-width:4;}
+.ring-fill{fill:none;stroke-width:4;stroke-linecap:round;}
+.ring-label-wrap{text-align:center;margin-top:4px;}
+.ring-pct{font-size:15px;font-weight:700;color:var(--navy);}
+.ring-sub{font-size:10px;color:var(--slate);}
+
+/* DECISION LOG BANNER */
+.decision-banner{border-radius:10px;padding:12px 16px;margin-bottom:16px;font-size:13px;font-weight:600;display:none;align-items:center;gap:10px;}
+.decision-banner.show{display:flex;}
+.decision-banner.docs{background:#DCFCE7;color:#14532D;border:1px solid #86EFAC;}
+.decision-banner.approved{background:var(--blue-pale);color:var(--blue-dim);border:1px solid #BFDBFE;}
+.decision-banner svg{width:18px;height:18px;flex-shrink:0;}
+
+/* CASE TABS */
+.case-tabs{display:flex;gap:0;border-bottom:2px solid var(--border);margin-bottom:20px;}
+.case-tab{padding:8px 18px;font-size:13px;font-weight:600;color:var(--slate);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .15s;}
+.case-tab:hover{color:var(--navy);}
+.case-tab.active{color:var(--navy);border-bottom-color:var(--green);}
+
+/* CASE PANELS */
+.case-panel{display:none;}.case-panel.active{display:block;}
+
+/* DETAIL GRID */
+.detail-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:16px;}
+.detail-card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px;}
+.detail-card-title{font-size:10.5px;font-weight:700;color:var(--slate);text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px;}
+.dr{display:flex;align-items:center;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--surface);}
+.dr:last-child{border-bottom:none;}
+.dr-label{font-size:12px;color:var(--text-mid);}
+.dr-val{font-size:12px;font-weight:700;color:var(--navy);}
+.dr-val.warn{color:#92400E;}
+.dr-val.bad{color:#991B1B;}
+.dr-val.ok{color:var(--green-dim);}
+.doc-badge{font-size:10.5px;font-weight:600;padding:2px 8px;border-radius:99px;}
+.doc-badge.ok{background:var(--green-pale);color:var(--green-dim);}
+.doc-badge.missing{background:var(--red-pale);color:#991B1B;}
+.doc-badge.pending{background:var(--amber-pale);color:#92400E;}
+
+/* RISK FLAGS */
+.risk-flag{display:flex;align-items:flex-start;gap:8px;margin-bottom:10px;}
+.risk-icon{width:20px;height:20px;border-radius:5px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+.risk-icon.red{background:var(--red-pale);color:var(--red);}
+.risk-icon.amber{background:var(--amber-pale);color:var(--amber);}
+.risk-icon svg{width:12px;height:12px;}
+.risk-text{font-size:12.5px;color:var(--text-mid);line-height:1.5;}
+
+/* AI SUMMARY */
+.ai-summary-box{background:linear-gradient(135deg,#EFF6FF 0%,#F0FDF4 100%);border:1px solid #DBEAFE;border-radius:10px;padding:14px 16px;margin-bottom:16px;}
+.ai-label{display:flex;align-items:center;gap:5px;font-size:10px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;}
+.ai-label svg{width:12px;height:12px;}
+.ai-body{font-size:13px;color:var(--text-mid);line-height:1.6;}
+.ai-detail-btn{margin-top:10px;background:var(--blue-pale);border:1px solid #BFDBFE;border-radius:7px;padding:7px 14px;font-size:12px;font-weight:600;color:var(--blue-dim);cursor:pointer;display:inline-flex;align-items:center;gap:5px;}
+.ai-detail-btn:hover{background:#DBEAFE;}
+.ai-detail-btn svg{width:13px;height:13px;}
+
+/* AI DEEP ANALYSIS PANEL */
+.ai-deep{display:none;margin-top:12px;background:#fff;border:1px solid #BFDBFE;border-radius:10px;padding:16px;}
+.ai-deep.open{display:block;}
+.ai-deep-title{font-size:12px;font-weight:700;color:var(--blue-dim);margin-bottom:12px;display:flex;align-items:center;gap:6px;}
+.ai-deep-title svg{width:14px;height:14px;}
+.ai-section{margin-bottom:14px;}
+.ai-section-h{font-size:10.5px;font-weight:700;color:var(--slate);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;}
+.ai-section p{font-size:12.5px;color:var(--text-mid);line-height:1.5;}
+.ai-tag{display:inline-block;background:var(--surface);border:1px solid var(--border);border-radius:5px;padding:2px 8px;font-size:11.5px;font-weight:500;color:var(--text-mid);margin:2px 2px 2px 0;}
+.ai-tag.bad{background:var(--red-pale);border-color:#FECACA;color:#991B1B;}
+.ai-tag.ok{background:var(--green-pale);border-color:#BBF7D0;color:var(--green-dim);}
+.ai-tag.warn{background:var(--amber-pale);border-color:#FDE68A;color:#92400E;}
+
+/* CUSTOMER MESSAGES */
+.msg-thread{display:flex;flex-direction:column;gap:10px;margin-bottom:16px;}
+.msg-bubble{max-width:80%;padding:10px 14px;border-radius:12px;font-size:13px;line-height:1.5;}
+.msg-bubble.customer{background:var(--surface);border:1px solid var(--border);color:var(--text);border-radius:12px 12px 12px 4px;align-self:flex-start;}
+.msg-bubble.advisor{background:var(--navy);color:#fff;border-radius:12px 12px 4px 12px;align-self:flex-end;}
+.msg-meta{font-size:10.5px;color:var(--slate-light);margin-top:3px;}
+.msg-meta.right{text-align:right;}
+.msg-unread-badge{background:var(--red);color:#fff;font-size:10px;font-weight:700;padding:1px 6px;border-radius:99px;margin-left:6px;}
+.msg-input-wrap{display:flex;gap:8px;margin-top:8px;}
+.msg-input{flex:1;border:1px solid var(--border);border-radius:8px;padding:8px 12px;font-size:13px;font-family:inherit;outline:none;resize:none;}
+.msg-input:focus{border-color:var(--blue);}
+.msg-send-btn{background:var(--navy);color:#fff;border:none;border-radius:8px;padding:8px 16px;font-size:13px;font-weight:600;cursor:pointer;}
+.msg-send-btn:hover{background:var(--navy-mid);}
+
+/* PROGRESS TRACK */
+.progress-wrap{background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:16px;}
+.progress-track{display:flex;align-items:center;}
+.progress-step{flex:1;text-align:center;position:relative;}
+.progress-step::after{content:'';position:absolute;top:9px;right:-50%;width:100%;height:2px;background:var(--border);z-index:0;}
+.progress-step:last-child::after{display:none;}
+.p-dot{width:20px;height:20px;border-radius:50%;background:var(--border);border:2px solid var(--border);margin:0 auto 5px;position:relative;z-index:1;display:flex;align-items:center;justify-content:center;}
+.p-dot.done{background:var(--green);border-color:var(--green);}
+.p-dot.active{background:#fff;border-color:var(--navy);border-width:3px;}
+.p-dot.done svg{width:10px;height:10px;color:#fff;}
+.p-label{font-size:10px;color:var(--slate);font-weight:500;}
+.p-label.done{color:var(--green-dim);}
+.p-label.active{color:var(--navy);font-weight:700;}
+
+/* ACTION BAR */
+.action-section{background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:16px;}
+.action-section-title{font-size:11px;font-weight:700;color:var(--slate);text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px;}
+.action-btns{display:flex;gap:10px;flex-wrap:wrap;}
+.action-btn{padding:9px 18px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;border:none;transition:all .15s;display:inline-flex;align-items:center;gap:6px;}
+.action-btn svg{width:14px;height:14px;}
+.action-btn.primary{background:var(--navy);color:#fff;}
+.action-btn.primary:hover{background:var(--navy-mid);}
+.action-btn.secondary{background:var(--surface);color:var(--text-mid);border:1px solid var(--border);}
+.action-btn.secondary:hover{background:var(--border);}
+.action-btn.approve{background:var(--green-pale);color:var(--green-dim);border:1px solid #BBF7D0;}
+.action-btn.approve:hover{background:#BBF7D0;}
+.action-btn.flag{background:var(--red-pale);color:#991B1B;border:1px solid #FECACA;}
+.action-btn.flag:hover{background:#FECACA;}
+.action-btn:disabled{opacity:.45;cursor:not-allowed;}
+
+/* RIGHT PANEL */
+.right-panel{width:260px;flex-shrink:0;padding:24px 18px;border-left:1px solid var(--border);background:#fff;}
+.rp-title{font-size:13px;font-weight:700;color:var(--navy);margin-bottom:14px;}
+.activity-item{display:flex;gap:10px;margin-bottom:14px;}
+.activity-dot-wrap{display:flex;flex-direction:column;align-items:center;}
+.a-dot{width:8px;height:8px;border-radius:50%;background:var(--green);flex-shrink:0;margin-top:4px;}
+.a-dot.amber{background:var(--amber);}
+.a-dot.red{background:var(--red);}
+.a-line{flex:1;width:1px;background:var(--border);margin-top:4px;min-height:20px;}
+.a-text{font-size:12px;color:var(--text-mid);line-height:1.4;}
+.a-time{font-size:11px;color:var(--slate-light);margin-top:2px;}
+.divider{height:1px;background:var(--border);margin:18px 0;}
+
+/* ── MODALS ── */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(15,27,45,.55);z-index:500;align-items:center;justify-content:center;}
+.modal-overlay.open{display:flex;}
+.modal{background:#fff;border-radius:16px;padding:28px;max-width:480px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,.18);}
+.modal-title{font-size:17px;font-weight:700;color:var(--navy);margin-bottom:6px;}
+.modal-sub{font-size:13px;color:var(--slate);margin-bottom:20px;line-height:1.5;}
+.checklist{display:flex;flex-direction:column;gap:10px;margin-bottom:22px;}
+.check-item{display:flex;align-items:center;gap:10px;cursor:pointer;padding:8px 12px;border-radius:8px;border:1px solid var(--border);transition:background .1s;}
+.check-item:hover{background:var(--surface);}
+.check-item input[type=checkbox]{width:16px;height:16px;accent-color:var(--green);cursor:pointer;flex-shrink:0;}
+.check-item label{font-size:13px;color:var(--text-mid);cursor:pointer;flex:1;}
+.check-item.checked{background:var(--green-pale);border-color:#BBF7D0;}
+.check-item.checked label{color:var(--green-dim);font-weight:500;}
+.modal-btns{display:flex;gap:10px;justify-content:flex-end;}
+.modal-cancel{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:8px 18px;font-size:13px;font-weight:600;cursor:pointer;color:var(--text-mid);}
+.modal-cancel:hover{background:var(--border);}
+.modal-confirm{background:var(--green);border:none;border-radius:8px;padding:8px 18px;font-size:13px;font-weight:600;cursor:pointer;color:#fff;}
+.modal-confirm:hover{background:var(--green-dim);}
+.modal-confirm:disabled{opacity:.4;cursor:not-allowed;}
+.modal-warn{font-size:11.5px;color:var(--amber);font-weight:500;margin-bottom:14px;display:none;}
+.modal-warn.show{display:block;}
+
+/* TOAST */
+.toast{position:fixed;bottom:28px;right:28px;background:var(--navy);color:#fff;padding:12px 20px;border-radius:10px;font-size:13px;font-weight:600;z-index:1000;transform:translateY(80px);opacity:0;transition:all .3s;box-shadow:0 8px 24px rgba(0,0,0,.2);display:flex;align-items:center;gap:8px;}
+.toast.show{transform:translateY(0);opacity:1;}
+.toast svg{width:16px;height:16px;flex-shrink:0;}
+
+@media(max-width:960px){.right-panel{display:none;}.detail-grid{grid-template-columns:1fr 1fr;}}
+@media(max-width:700px){.sidebar{display:none;}.stats-row{grid-template-columns:1fr 1fr;}.detail-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="topnav">
+  <div class="topnav-logo">
+    <div class="logo-icon">
+      <!-- Silta bar-chart / mountain icon matching the screenshot -->
+      <svg viewBox="0 0 24 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="1" y="12" width="3" height="8" rx="1" fill="white"/>
+        <rect x="6" y="7" width="3" height="13" rx="1" fill="white"/>
+        <rect x="11" y="3" width="3" height="17" rx="1" fill="white"/>
+        <rect x="16" y="8" width="3" height="12" rx="1" fill="white"/>
+        <rect x="21" y="11" width="3" height="9" rx="1" fill="white"/>
+      </svg>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:1px;">
+      <span class="logo-text">Silta</span>
+      <span style="color:var(--slate-light);font-size:9px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;">Mortgage Journey</span>
+    </div>
+  </div>
+  <div class="topnav-right">
+    <div class="nav-avatar">MV</div>
+  </div>
+</nav>
+
+<div class="layout">
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-section">
+    <div class="sidebar-label">Queue</div>
+    <div class="sidebar-item active" onclick="showQueue(); setSidebarActive(this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+      All Applications<span class="sidebar-count amber" id="sb-all">7</span>
+    </div>
+    <div class="sidebar-item" onclick="showQueue('action'); setSidebarActive(this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      Needs Action<span class="sidebar-count" id="sb-action">3</span>
+    </div>
+    <div class="sidebar-item" onclick="showQueue('ready'); setSidebarActive(this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+      Ready for Offer<span class="sidebar-count green" id="sb-ready">2</span>
+    </div>
+  </div>
+  <div class="sidebar-section">
+    <div class="sidebar-label">Tools</div>
+    <div class="sidebar-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+      AI Assistant
+    </div>
+    <div class="sidebar-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      Reports
+    </div>
+  </div>
+</aside>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- VIEW 1 — QUEUE                             -->
+<!-- ═══════════════════════════════════════════ -->
+<main class="main">
+<div id="view-queue" class="view active">
+
+  <div class="page-header">
+    <div>
+      <div class="page-title">Application Queue</div>
+      <div class="page-sub" id="queue-sub">7 active applications · 3 require your attention</div>
+    </div>
+    <div class="header-actions">
+      <button class="btn btn-outline" onclick="showQueue()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="20" y2="12"/><line x1="12" y1="18" x2="20" y2="18"/></svg>Clear Filter
+      </button>
+    </div>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-card"><div class="stat-label">Active Applications</div><div class="stat-value" id="stat-active">7</div><div class="stat-delta">↑ 2 this week</div></div>
+    <div class="stat-card"><div class="stat-label">Docs Awaited</div><div class="stat-value">12</div><div class="stat-delta warn">3 overdue</div></div>
+    <div class="stat-card"><div class="stat-label">High Risk Flags</div><div class="stat-value" id="stat-risk">4</div><div class="stat-delta bad">↑ review now</div></div>
+    <div class="stat-card"><div class="stat-label">Ready for Offer</div><div class="stat-value" id="stat-ready">2</div><div class="stat-delta">↑ 1 new today</div></div>
+  </div>
+
+  <div class="section-header">
+    <div class="section-title">Customers</div>
+    <div class="filter-row">
+      <div class="filter-chip active" onclick="applyFilter('all',this)">All</div>
+      <div class="filter-chip" onclick="applyFilter('action',this)">Action needed</div>
+      <div class="filter-chip" onclick="applyFilter('review',this)">In review</div>
+      <div class="filter-chip" onclick="applyFilter('ready',this)">Offer ready</div>
+    </div>
+  </div>
+
+  <div class="search-wrap">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input type="text" placeholder="Search by name, reference, or status…" oninput="searchQueue(this.value)">
+  </div>
+
+  <!-- QUEUE ITEM — Lucas Martin (action) -->
+  <div class="queue-card" data-filter="action" data-name="lucas martin" id="card-lucas">
+    <div class="risk-ribbon high"></div>
+    <div class="queue-card-body">
+      <div class="customer-avatar" style="background:#7C3AED">LM</div>
+      <div class="queue-info">
+        <div class="queue-name">Lucas Martin <span class="msg-unread-badge">1 message</span></div>
+        <div class="queue-meta">Ref #SLT-2841 · Applied 3 days ago · €320,000 · <strong style="color:#991B1B">High Risk</strong></div>
+        <div class="queue-chips">
+          <span class="status-chip red"><span class="status-dot"></span>Action Needed</span>
+          <span class="status-chip amber"><span class="status-dot"></span>Docs Incomplete</span>
+        </div>
+      </div>
+      <div class="queue-readiness"><div class="q-pct" style="color:var(--red)">28%</div><div class="q-sub">Readiness</div></div>
+      <button class="queue-open-btn" onclick="openCase('lucas')">
+        Open Case <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- QUEUE ITEM — Sophie Bernard (review) -->
+  <div class="queue-card" data-filter="review" data-name="sophie bernard" id="card-sophie">
+    <div class="risk-ribbon medium"></div>
+    <div class="queue-card-body">
+      <div class="customer-avatar" style="background:#0EA5E9">SB</div>
+      <div class="queue-info">
+        <div class="queue-name">Sophie Bernard</div>
+        <div class="queue-meta">Ref #SLT-2837 · Applied 6 days ago · €275,000 · <strong style="color:#92400E">Medium Risk</strong></div>
+        <div class="queue-chips">
+          <span class="status-chip blue"><span class="status-dot"></span>AI Review Pending</span>
+          <span class="status-chip green"><span class="status-dot"></span>Most Docs Uploaded</span>
+        </div>
+      </div>
+      <div class="queue-readiness"><div class="q-pct" style="color:var(--amber)">61%</div><div class="q-sub">Readiness</div></div>
+      <button class="queue-open-btn" onclick="openCase('sophie')">
+        Open Case <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- QUEUE ITEM — Antoine Rousseau (ready) -->
+  <div class="queue-card" data-filter="ready" data-name="antoine rousseau" id="card-antoine">
+    <div class="risk-ribbon low"></div>
+    <div class="queue-card-body">
+      <div class="customer-avatar" style="background:#059669">AR</div>
+      <div class="queue-info">
+        <div class="queue-name">Antoine Rousseau</div>
+        <div class="queue-meta">Ref #SLT-2829 · Applied 11 days ago · €410,000 · <strong style="color:var(--green-dim)">Low Risk</strong></div>
+        <div class="queue-chips">
+          <span class="status-chip green"><span class="status-dot"></span>Docs Complete</span>
+          <span class="status-chip blue"><span class="status-dot"></span>Ready for Offer</span>
+        </div>
+      </div>
+      <div class="queue-readiness"><div class="q-pct" style="color:var(--green-dim)">90%</div><div class="q-sub">Readiness</div></div>
+      <button class="queue-open-btn" onclick="openCase('antoine')">
+        Open Case <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- filler cards -->
+  <div class="queue-card" data-filter="action" data-name="marie dupont">
+    <div class="risk-ribbon high"></div>
+    <div class="queue-card-body">
+      <div class="customer-avatar" style="background:#DC2626">MD</div>
+      <div class="queue-info">
+        <div class="queue-name">Marie Dupont</div>
+        <div class="queue-meta">Ref #SLT-2845 · Applied 1 day ago · €180,000</div>
+        <div class="queue-chips"><span class="status-chip red"><span class="status-dot"></span>Action Needed</span></div>
+      </div>
+      <div class="queue-readiness"><div class="q-pct" style="color:var(--red)">12%</div><div class="q-sub">Readiness</div></div>
+      <button class="queue-open-btn">Open Case <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></button>
+    </div>
+  </div>
+  <div class="queue-card" data-filter="review" data-name="jean-paul leclerc">
+    <div class="risk-ribbon medium"></div>
+    <div class="queue-card-body">
+      <div class="customer-avatar" style="background:#7C3AED">JL</div>
+      <div class="queue-info">
+        <div class="queue-name">Jean-Paul Leclerc</div>
+        <div class="queue-meta">Ref #SLT-2833 · Applied 8 days ago · €340,000</div>
+        <div class="queue-chips"><span class="status-chip blue"><span class="status-dot"></span>AI Review Pending</span></div>
+      </div>
+      <div class="queue-readiness"><div class="q-pct" style="color:var(--amber)">54%</div><div class="q-sub">Readiness</div></div>
+      <button class="queue-open-btn">Open Case <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></button>
+    </div>
+  </div>
+  <div class="queue-card" data-filter="ready" data-name="isabelle moreau">
+    <div class="risk-ribbon low"></div>
+    <div class="queue-card-body">
+      <div class="customer-avatar" style="background:#0369A1">IM</div>
+      <div class="queue-info">
+        <div class="queue-name">Isabelle Moreau</div>
+        <div class="queue-meta">Ref #SLT-2826 · Applied 14 days ago · €290,000</div>
+        <div class="queue-chips"><span class="status-chip green"><span class="status-dot"></span>Ready for Offer</span></div>
+      </div>
+      <div class="queue-readiness"><div class="q-pct" style="color:var(--green-dim)">95%</div><div class="q-sub">Readiness</div></div>
+      <button class="queue-open-btn">Open Case <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></button>
+    </div>
+  </div>
+  <div class="queue-card" data-filter="action" data-name="thomas girard">
+    <div class="risk-ribbon high"></div>
+    <div class="queue-card-body">
+      <div class="customer-avatar" style="background:#B45309">TG</div>
+      <div class="queue-info">
+        <div class="queue-name">Thomas Girard</div>
+        <div class="queue-meta">Ref #SLT-2840 · Applied 2 days ago · €225,000</div>
+        <div class="queue-chips"><span class="status-chip red"><span class="status-dot"></span>Action Needed</span></div>
+      </div>
+      <div class="queue-readiness"><div class="q-pct" style="color:var(--red)">20%</div><div class="q-sub">Readiness</div></div>
+      <button class="queue-open-btn">Open Case <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></button>
+    </div>
+  </div>
+
+</div><!-- /view-queue -->
+
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- VIEW 2 — CASE DETAIL                       -->
+<!-- ═══════════════════════════════════════════ -->
+<div id="view-case" class="view">
+
+  <div class="breadcrumb">
+    <a onclick="showQueue()">Application Queue</a>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+    <span id="bc-name">Lucas Martin</span>
+  </div>
+
+  <!-- DECISION BANNER -->
+  <div class="decision-banner docs" id="banner-docs">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+    <div><strong>Decision logged:</strong> Missing documents requested from customer. A notification has been sent.</div>
+  </div>
+  <div class="decision-banner approved" id="banner-approved">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+    <div><strong>Decision logged:</strong> Application approved for next stage — status updated to <strong>Ready for Offer</strong>.</div>
+  </div>
+
+  <!-- CASE HEADER -->
+  <div class="case-header" id="case-header">
+    <div class="case-header-top">
+      <div class="case-avatar" id="case-avatar" style="background:#7C3AED">LM</div>
+      <div style="flex:1;min-width:0;">
+        <div class="case-name" id="case-name">Lucas Martin</div>
+        <div class="case-meta" id="case-meta">Ref #SLT-2841 · Applied 3 days ago · €320,000 purchase</div>
+        <div class="case-chips" id="case-chips">
+          <span class="status-chip red"><span class="status-dot"></span>High Risk</span>
+          <span class="status-chip amber"><span class="status-dot"></span>Docs Incomplete</span>
+          <span class="status-chip blue"><span class="status-dot"></span>AI Review Pending</span>
+        </div>
+      </div>
+      <div class="case-readiness">
+        <svg class="ring-svg" viewBox="0 0 36 36" id="case-ring">
+          <circle class="ring-bg" cx="18" cy="18" r="16"/>
+          <circle class="ring-fill" cx="18" cy="18" r="16" id="ring-arc" stroke="#EF4444" style="stroke-dasharray:100.5;stroke-dashoffset:72;"/>
+        </svg>
+        <div class="ring-label-wrap">
+          <div class="ring-pct" id="ring-pct">28%</div>
+          <div class="ring-sub">Readiness</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROGRESS TRACK -->
+  <div class="progress-wrap">
+    <div class="progress-track" id="case-progress">
+      <div class="progress-step"><div class="p-dot done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><div class="p-label done">Started</div></div>
+      <div class="progress-step"><div class="p-dot active" id="pdot-docs"></div><div class="p-label active" id="plbl-docs">Docs</div></div>
+      <div class="progress-step"><div class="p-dot" id="pdot-ai"></div><div class="p-label" id="plbl-ai">AI Review</div></div>
+      <div class="progress-step"><div class="p-dot" id="pdot-advisor"></div><div class="p-label" id="plbl-advisor">Advisor</div></div>
+      <div class="progress-step"><div class="p-dot" id="pdot-offer"></div><div class="p-label" id="plbl-offer">Final Offer</div></div>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <div class="case-tabs">
+    <div class="case-tab active" onclick="showTab('profile',this)">Customer Profile</div>
+    <div class="case-tab" onclick="showTab('docs',this)">Documents</div>
+    <div class="case-tab" onclick="showTab('risk',this)">Risk Flags</div>
+    <div class="case-tab" onclick="showTab('ai',this)">AI Summary</div>
+    <div class="case-tab" onclick="showTab('messages',this)">Messages <span class="msg-unread-badge" id="msg-badge" style="display:none">1</span></div>
+  </div>
+
+  <!-- TAB: PROFILE -->
+  <div class="case-panel active" id="panel-profile">
+    <div class="detail-grid">
+      <div class="detail-card">
+        <div class="detail-card-title">Personal Info</div>
+        <div class="dr"><span class="dr-label">Full name</span><span class="dr-val" id="p-name">Lucas Martin</span></div>
+        <div class="dr"><span class="dr-label">Date of birth</span><span class="dr-val">14 March 1988</span></div>
+        <div class="dr"><span class="dr-label">Nationality</span><span class="dr-val">French</span></div>
+        <div class="dr"><span class="dr-label">Marital status</span><span class="dr-val">Single</span></div>
+        <div class="dr"><span class="dr-label">Dependants</span><span class="dr-val">0</span></div>
+      </div>
+      <div class="detail-card">
+        <div class="detail-card-title">Financial Profile</div>
+        <div class="dr"><span class="dr-label">Monthly income</span><span class="dr-val" id="p-income">€3,200</span></div>
+        <div class="dr"><span class="dr-label">Employment type</span><span class="dr-val" id="p-employ">Freelance, 1.5 yrs</span></div>
+        <div class="dr"><span class="dr-label">Existing debts</span><span class="dr-val bad" id="p-debts">€820 / mo</span></div>
+        <div class="dr"><span class="dr-label">Debt-to-income</span><span class="dr-val bad" id="p-dti">25.6%</span></div>
+        <div class="dr"><span class="dr-label">Credit score</span><span class="dr-val warn" id="p-credit">Fair (620)</span></div>
+      </div>
+      <div class="detail-card">
+        <div class="detail-card-title">Purchase Details</div>
+        <div class="dr"><span class="dr-label">Property value</span><span class="dr-val" id="p-prop">€320,000</span></div>
+        <div class="dr"><span class="dr-label">Down payment</span><span class="dr-val" id="p-down">€32,000 (10%)</span></div>
+        <div class="dr"><span class="dr-label">Loan amount</span><span class="dr-val" id="p-loan">€288,000</span></div>
+        <div class="dr"><span class="dr-label">Loan-to-value</span><span class="dr-val warn">90%</span></div>
+        <div class="dr"><span class="dr-label">Purchase type</span><span class="dr-val">First home</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: DOCS -->
+  <div class="case-panel" id="panel-docs">
+    <div class="detail-card" style="margin-bottom:16px;">
+      <div class="detail-card-title">Document Checklist</div>
+      <div class="dr"><span class="dr-label">ID Verification</span><span class="doc-badge ok">✓ Uploaded</span></div>
+      <div class="dr"><span class="dr-label">Payslips (3 months)</span><span class="doc-badge missing" id="doc-payslips">Missing</span></div>
+      <div class="dr"><span class="dr-label">Bank statements (3 months)</span><span class="doc-badge pending" id="doc-bank">Pending</span></div>
+      <div class="dr"><span class="dr-label">Tax return 2024</span><span class="doc-badge missing" id="doc-tax">Missing</span></div>
+      <div class="dr"><span class="dr-label">Purchase offer / Compromis</span><span class="doc-badge ok">✓ Uploaded</span></div>
+      <div class="dr"><span class="dr-label">Proof of address</span><span class="doc-badge ok">✓ Uploaded</span></div>
+    </div>
+    <div style="font-size:12.5px;color:var(--text-mid);background:var(--red-pale);border:1px solid #FECACA;border-radius:8px;padding:10px 14px;" id="docs-warning">
+      ⚠️ <strong>2 required documents are missing</strong> — payslips and tax return. The application cannot proceed to AI review until these are received.
+    </div>
+  </div>
+
+  <!-- TAB: RISK -->
+  <div class="case-panel" id="panel-risk">
+    <div class="detail-card">
+      <div class="detail-card-title">Risk Assessment</div>
+      <div style="margin-top:4px;">
+        <div class="risk-flag">
+          <div class="risk-icon red"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg></div>
+          <span class="risk-text"><strong>DTI ratio 25.6%</strong> — exceeds the recommended 20% ceiling. With €820/mo in existing obligations on a €3,200 gross income, headroom for the new mortgage payment is limited.</span>
+        </div>
+        <div class="risk-flag">
+          <div class="risk-icon red"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg></div>
+          <span class="risk-text"><strong>Freelance tenure &lt; 2 years</strong> — income stability cannot be confirmed. Most lenders require at minimum 2 full tax-year cycles for self-employed/freelance applicants.</span>
+        </div>
+        <div class="risk-flag">
+          <div class="risk-icon red"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg></div>
+          <span class="risk-text"><strong>2 required documents missing</strong> — payslips and 2024 tax return. AI review cannot run, and lender submission is blocked.</span>
+        </div>
+        <div class="risk-flag">
+          <div class="risk-icon amber"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
+          <span class="risk-text"><strong>Credit score 620 (Fair)</strong> — borderline for standard products; eligible for some lenders but likely to trigger higher rates or reduced LTV offers.</span>
+        </div>
+        <div class="risk-flag">
+          <div class="risk-icon amber"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
+          <span class="risk-text"><strong>LTV at 90%</strong> — down payment is only 10%. This narrows the lender pool significantly and may require mortgage insurance.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: AI SUMMARY -->
+  <div class="case-panel" id="panel-ai">
+    <div class="ai-summary-box">
+      <div class="ai-label">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 110 20A10 10 0 0112 2zm0 2a8 8 0 100 16A8 8 0 0012 4zm1 4v4h3l-4 5-4-5h3V8h2z"/></svg>
+        AI Summary
+      </div>
+      <div class="ai-body" id="ai-body-text">
+        Lucas is a first-time buyer with freelance income and an elevated debt load. Two critical documents are still missing — payslips and the 2024 tax return — which blocks AI review from completing. The DTI ratio at 25.6% is a significant concern, and the 1.5-year freelance history falls short of standard lender requirements. Recommendation: request missing documents immediately, then re-assess affordability once income history is confirmed.
+      </div>
+      <button class="ai-detail-btn" onclick="toggleAIDeep()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        View AI Analysis Details
+      </button>
+    </div>
+
+    <!-- AI DEEP PANEL -->
+    <div class="ai-deep" id="ai-deep-panel">
+      <div class="ai-deep-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18"/></svg>
+        Detailed AI Reasoning — Lucas Martin
+      </div>
+
+      <div class="ai-section">
+        <div class="ai-section-h">Customer data used by AI</div>
+        <p>The AI model analysed the following inputs from the customer's profile and uploaded documents:</p>
+        <div style="margin-top:8px;">
+          <span class="ai-tag ok">Monthly income: €3,200</span>
+          <span class="ai-tag warn">Employment: Freelance (1.5 yrs)</span>
+          <span class="ai-tag bad">Debts: €820/mo</span>
+          <span class="ai-tag warn">Credit score: 620</span>
+          <span class="ai-tag warn">Down payment: 10%</span>
+          <span class="ai-tag ok">Property value: €320,000</span>
+        </div>
+      </div>
+
+      <div class="ai-section">
+        <div class="ai-section-h">Documents reviewed</div>
+        <div style="margin-top:4px;">
+          <span class="ai-tag ok">✓ ID Verification</span>
+          <span class="ai-tag ok">✓ Purchase offer</span>
+          <span class="ai-tag ok">✓ Proof of address</span>
+          <span class="ai-tag bad">✗ Payslips (3mo) — Missing</span>
+          <span class="ai-tag bad">✗ Tax return 2024 — Missing</span>
+          <span class="ai-tag warn">⏳ Bank statements — Pending</span>
+        </div>
+      </div>
+
+      <div class="ai-section">
+        <div class="ai-section-h">Why HIGH RISK was assigned</div>
+        <p>Three independent risk factors each independently trigger a high-risk classification under Silta's scoring model:</p>
+        <div style="margin-top:8px;display:flex;flex-direction:column;gap:7px;">
+          <div style="background:var(--red-pale);border-radius:7px;padding:8px 12px;font-size:12px;color:#991B1B;border:1px solid #FECACA;">
+            <strong>Factor 1 — DTI &gt; 20%:</strong> Monthly obligations of €820 on gross income of €3,200 produce a debt-to-income ratio of 25.6%. The threshold for standard products is 20%, and for stretched products 22%. This applicant exceeds both.
+          </div>
+          <div style="background:var(--red-pale);border-radius:7px;padding:8px 12px;font-size:12px;color:#991B1B;border:1px solid #FECACA;">
+            <strong>Factor 2 — Freelance &lt; 2 years:</strong> Only 1.5 years of self-employment history is verifiable. Lenders require a minimum of 2 full fiscal years of certified income for self-employed applicants to confirm income stability.
+          </div>
+          <div style="background:var(--red-pale);border-radius:7px;padding:8px 12px;font-size:12px;color:#991B1B;border:1px solid #FECACA;">
+            <strong>Factor 3 — Missing documents:</strong> Without payslips and the 2024 tax return, the income declared on the application form cannot be verified. AI review is incomplete as a result.
+          </div>
+        </div>
+      </div>
+
+      <div class="ai-section">
+        <div class="ai-section-h">AI recommendation and reasoning</div>
+        <p>The AI recommends <strong>requesting missing documents as the immediate next step</strong>. This is because no lender submission or final risk scoring is possible until income can be verified. Additionally, if confirmed income differs materially from the declared €3,200, the DTI ratio and affordability picture will change. The advisor should also consider a direct call with the customer to clarify the 1.5-year freelance history and whether a co-applicant might strengthen the file.</p>
+      </div>
+
+      <div style="font-size:11.5px;color:var(--slate);margin-top:8px;padding-top:8px;border-top:1px solid var(--border);">
+        ⚠️ This analysis is generated automatically and must be validated by the human advisor before any decision is made. AI output is advisory only.
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: MESSAGES -->
+  <div class="case-panel" id="panel-messages">
+    <div class="detail-card" style="margin-bottom:14px;">
+      <div class="detail-card-title">Customer Conversation</div>
+      <div class="msg-thread" id="msg-thread" style="margin-top:10px;">
+        <div>
+          <div class="msg-bubble customer">Hello, I've uploaded my ID and purchase offer. I'm waiting to get my last payslips from my client — should have them by end of week. Is there anything else I can do in the meantime?</div>
+          <div class="msg-meta">Lucas Martin · Today, 09:14</div>
+        </div>
+        <div>
+          <div class="msg-bubble advisor">Hi Lucas, thanks for the update. Yes — the bank statements and your 2024 tax return are also required. If you can upload the tax return as soon as possible, it would help us move forward more quickly.</div>
+          <div class="msg-meta right">You (M. Vidal) · Today, 10:02</div>
+        </div>
+      </div>
+      <div class="msg-input-wrap">
+        <textarea class="msg-input" id="msg-input" rows="2" placeholder="Send a message to Lucas…"></textarea>
+        <button class="msg-send-btn" onclick="sendMessage()">Send</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ACTION SECTION -->
+  <div class="action-section" id="action-section">
+    <div class="action-section-title">Advisor Actions</div>
+    <div class="action-btns">
+      <button class="action-btn primary" id="btn-request-docs" onclick="requestDocs()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        Request Missing Documents
+      </button>
+      <button class="action-btn approve" id="btn-approve" onclick="openApproveModal()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+        Approve Review
+      </button>
+      <button class="action-btn secondary" onclick="showTab('messages', document.querySelector('.case-tab:nth-child(5)'))">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+        Message Customer
+      </button>
+      <button class="action-btn flag" onclick="escalate()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
+        Escalate
+      </button>
+    </div>
+  </div>
+
+</div><!-- /view-case -->
+</main>
+
+<!-- RIGHT PANEL (queue view only, hidden on case view) -->
+<aside class="right-panel" id="right-panel">
+  <div class="rp-title">Recent Activity</div>
+  <div class="activity-item">
+    <div class="activity-dot-wrap"><div class="a-dot"></div><div class="a-line"></div></div>
+    <div><div class="a-text">Antoine Rousseau's AI review completed — 0 flags</div><div class="a-time">Just now</div></div>
+  </div>
+  <div class="activity-item">
+    <div class="activity-dot-wrap"><div class="a-dot amber"></div><div class="a-line"></div></div>
+    <div><div class="a-text">Sophie Bernard uploaded 3 documents</div><div class="a-time">42 min ago</div></div>
+  </div>
+  <div class="activity-item">
+    <div class="activity-dot-wrap"><div class="a-dot red"></div><div class="a-line"></div></div>
+    <div><div class="a-text">Lucas Martin: 2 critical risk items detected</div><div class="a-time">2 hr ago</div></div>
+  </div>
+  <div class="activity-item">
+    <div class="activity-dot-wrap"><div class="a-dot"></div></div>
+    <div><div class="a-text">New application: Marie Dupont (€180,000)</div><div class="a-time">Yesterday</div></div>
+  </div>
+  <div class="divider"></div>
+  <div class="rp-title">Your Queue</div>
+  <div style="display:flex;flex-direction:column;gap:10px;">
+    <div style="display:flex;justify-content:space-between"><span style="font-size:12px;color:var(--text-mid)">Needs action</span><span style="font-size:13px;font-weight:700;color:var(--red)" id="rp-action">3</span></div>
+    <div style="display:flex;justify-content:space-between"><span style="font-size:12px;color:var(--text-mid)">In AI review</span><span style="font-size:13px;font-weight:700;color:var(--amber)">2</span></div>
+    <div style="display:flex;justify-content:space-between"><span style="font-size:12px;color:var(--text-mid)">Ready for offer</span><span style="font-size:13px;font-weight:700;color:var(--green-dim)" id="rp-ready">2</span></div>
+    <div style="display:flex;justify-content:space-between"><span style="font-size:12px;color:var(--text-mid)">Awaiting documents</span><span style="font-size:13px;font-weight:700;color:var(--navy)">4</span></div>
+  </div>
+  <div class="divider"></div>
+  <button class="btn btn-primary" style="width:100%;justify-content:center;font-size:12.5px;">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+    Ask Silta AI
+  </button>
+</aside>
+
+</div><!-- /layout -->
+
+<!-- ══════════════ APPROVE MODAL ══════════════ -->
+<div class="modal-overlay" id="modal-approve">
+  <div class="modal">
+    <div class="modal-title">Approve this application for the next stage?</div>
+    <div class="modal-sub">Before confirming, please verify that you have reviewed all the following. <strong>All boxes must be checked</strong> to proceed.</div>
+    <div class="checklist" id="checklist">
+      <label class="check-item" id="ci-1">
+        <input type="checkbox" onchange="updateChecklist()">
+        <label>Customer income reviewed and verified</label>
+      </label>
+      <label class="check-item" id="ci-2">
+        <input type="checkbox" onchange="updateChecklist()">
+        <label>Document status reviewed (all critical docs present)</label>
+      </label>
+      <label class="check-item" id="ci-3">
+        <input type="checkbox" onchange="updateChecklist()">
+        <label>Risk flags reviewed and assessed</label>
+      </label>
+      <label class="check-item" id="ci-4">
+        <input type="checkbox" onchange="updateChecklist()">
+        <label>AI summary and detailed analysis reviewed</label>
+      </label>
+      <label class="check-item" id="ci-5">
+        <input type="checkbox" onchange="updateChecklist()">
+        <label>Advisor confirms final human review is complete</label>
+      </label>
+    </div>
+    <div class="modal-warn" id="modal-warn">Please check all items before confirming.</div>
+    <div class="modal-btns">
+      <button class="modal-cancel" onclick="closeModal()">Cancel</button>
+      <button class="modal-confirm" id="modal-confirm-btn" onclick="confirmApprove()">Confirm Approval</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+  <span id="toast-text"></span>
+</div>
+
+<script>
+// ── STATE ──
+const state = {
+  filter: 'all',
+  decisionLogged: { docs: false, approved: false },
+  approvedCases: new Set(),
+  docsRequested: new Set(),
+  msgRead: false,
+  currentCase: 'lucas'
+};
+
+// ── VIEWS ──
+function showView(id) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.getElementById('right-panel').style.display = id === 'view-queue' ? '' : 'none';
+}
+
+function showQueue(filter) {
+  showView('view-queue');
+  if (filter) applyFilter(filter, document.querySelector(`.filter-chip:nth-child(${filter==='action'?2:filter==='ready'?4:1})`));
+}
+
+// ── FILTER ──
+function applyFilter(type, chip) {
+  state.filter = type;
+  document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+  if (chip) chip.classList.add('active');
+  const cards = document.querySelectorAll('.queue-card');
+  let shown = 0;
+  cards.forEach(card => {
+    const match = type === 'all' || card.dataset.filter === type;
+    card.classList.toggle('hidden', !match);
+    if (match) shown++;
+  });
+  const labels = {all:'All', action:'Action needed', review:'In review', ready:'Offer ready'};
+  document.getElementById('queue-sub').textContent = `${shown} application${shown!==1?'s':''} · Filter: ${labels[type]||type}`;
+}
+
+function searchQueue(val) {
+  const q = val.toLowerCase();
+  document.querySelectorAll('.queue-card').forEach(card => {
+    const nameMatch = card.dataset.name && card.dataset.name.includes(q);
+    const filterMatch = state.filter === 'all' || card.dataset.filter === state.filter;
+    card.classList.toggle('hidden', !(nameMatch && filterMatch));
+  });
+}
+
+// ── CASE DATA ──
+const caseData = {
+  lucas: {
+    name: 'Lucas Martin', initials: 'LM', avatarBg: '#7C3AED',
+    meta: 'Ref #SLT-2841 · Applied 3 days ago · €320,000 purchase',
+    chips: '<span class="status-chip red"><span class="status-dot"></span>High Risk</span><span class="status-chip amber"><span class="status-dot"></span>Docs Incomplete</span><span class="status-chip blue"><span class="status-dot"></span>AI Review Pending</span>',
+    ringColor: '#EF4444', ringOffset: '72', ringPct: '28%',
+    // progress: which steps are done vs active vs pending
+    progress: { started:'done', docs:'active', ai:'', advisor:'', offer:'' }
+  },
+  antoine: {
+    name: 'Antoine Rousseau', initials: 'AR', avatarBg: '#059669',
+    meta: 'Ref #SLT-2829 · Applied 11 days ago · €410,000 purchase',
+    chips: '<span class="status-chip green"><span class="status-dot"></span>Low Risk</span><span class="status-chip green"><span class="status-dot"></span>Docs Complete</span><span class="status-chip blue"><span class="status-dot"></span>Ready for Offer</span>',
+    ringColor: '#22C55E', ringOffset: '10', ringPct: '90%',
+    progress: { started:'done', docs:'done', ai:'done', advisor:'active', offer:'' }
+  },
+  sophie: {
+    name: 'Sophie Bernard', initials: 'SB', avatarBg: '#0EA5E9',
+    meta: 'Ref #SLT-2837 · Applied 6 days ago · €275,000 purchase',
+    chips: '<span class="status-chip amber"><span class="status-dot"></span>Medium Risk</span><span class="status-chip blue"><span class="status-dot"></span>AI Review Pending</span><span class="status-chip green"><span class="status-dot"></span>Most Docs Uploaded</span>',
+    ringColor: '#F59E0B', ringOffset: '39', ringPct: '61%',
+    progress: { started:'done', docs:'done', ai:'active', advisor:'', offer:'' }
+  }
+};
+
+const checkSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>';
+
+// ── OPEN CASE ──
+function openCase(who) {
+  state.currentCase = who;
+  showView('view-case');
+  // Reset banners
+  document.getElementById('banner-docs').classList.remove('show');
+  document.getElementById('banner-approved').classList.remove('show');
+  if (state.docsRequested.has(who)) document.getElementById('banner-docs').classList.add('show');
+  if (state.approvedCases.has(who)) document.getElementById('banner-approved').classList.add('show');
+  // Tabs reset
+  showTab('profile', document.querySelector('.case-tab'));
+  // Scroll top
+  document.querySelector('.main').scrollTop = 0;
+  // Show message badge for lucas only
+  const badge = document.getElementById('msg-badge');
+  badge.style.display = (who === 'lucas' && !state.msgRead) ? '' : 'none';
+
+  // ── Update header from caseData ──
+  const d = caseData[who] || caseData['lucas'];
+  document.getElementById('bc-name').textContent = d.name;
+  document.getElementById('case-name').textContent = d.name;
+  document.getElementById('case-meta').textContent = d.meta;
+  document.getElementById('case-chips').innerHTML = d.chips;
+  document.getElementById('case-avatar').textContent = d.initials;
+  document.getElementById('case-avatar').style.background = d.avatarBg;
+  document.getElementById('ring-pct').textContent = d.ringPct;
+  const arc = document.getElementById('ring-arc');
+  arc.setAttribute('stroke', d.ringColor);
+  arc.style.strokeDashoffset = d.ringOffset;
+
+  // ── Update progress steps ──
+  const steps = ['docs','ai','advisor','offer'];
+  steps.forEach(s => {
+    const dot = document.getElementById('pdot-' + s);
+    const lbl = document.getElementById('plbl-' + s);
+    const status = d.progress[s];
+    dot.className = 'p-dot' + (status === 'done' ? ' done' : status === 'active' ? ' active' : '');
+    dot.innerHTML = status === 'done' ? checkSvg : '';
+    lbl.className = 'p-label' + (status === 'done' ? ' done' : status === 'active' ? ' active' : '');
+  });
+}
+
+// ── TABS ──
+function showTab(tab, el) {
+  document.querySelectorAll('.case-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.case-panel').forEach(p => p.classList.remove('active'));
+  if (el) el.classList.add('active');
+  document.getElementById('panel-' + tab).classList.add('active');
+  if (tab === 'messages') {
+    state.msgRead = true;
+    document.getElementById('msg-badge').style.display = 'none';
+  }
+}
+
+// ── AI DEEP ──
+function toggleAIDeep() {
+  const panel = document.getElementById('ai-deep-panel');
+  panel.classList.toggle('open');
+  const btn = document.querySelector('.ai-detail-btn');
+  btn.innerHTML = panel.classList.contains('open')
+    ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px"><polyline points="18 15 12 9 6 15"/></svg> Hide AI Details'
+    : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> View AI Analysis Details';
+}
+
+// ── REQUEST DOCS ──
+function requestDocs() {
+  const who = state.currentCase;
+  const d = caseData[who] || caseData['lucas'];
+  state.docsRequested.add(who);
+  const banner = document.getElementById('banner-docs');
+  banner.classList.add('show');
+  document.getElementById('btn-request-docs').disabled = true;
+  document.getElementById('btn-request-docs').innerHTML = '✓ Documents Requested';
+  showToast('Decision logged: Missing documents requested from customer.');
+  addActivity('Document request sent to ' + d.name, 'green', 'Just now');
+}
+
+// ── APPROVE MODAL ──
+function openApproveModal() {
+  // Reset checkboxes
+  document.querySelectorAll('#checklist input[type=checkbox]').forEach(cb => {
+    cb.checked = false;
+    cb.closest('.check-item').classList.remove('checked');
+  });
+  document.getElementById('modal-warn').classList.remove('show');
+  document.getElementById('modal-confirm-btn').disabled = true;
+  document.getElementById('modal-approve').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('modal-approve').classList.remove('open');
+}
+
+function updateChecklist() {
+  const items = document.querySelectorAll('#checklist input[type=checkbox]');
+  items.forEach(cb => {
+    cb.closest('.check-item').classList.toggle('checked', cb.checked);
+  });
+  const allChecked = [...items].every(cb => cb.checked);
+  document.getElementById('modal-confirm-btn').disabled = !allChecked;
+  if (allChecked) document.getElementById('modal-warn').classList.remove('show');
+}
+
+function confirmApprove() {
+  const items = document.querySelectorAll('#checklist input[type=checkbox]');
+  if (![...items].every(cb => cb.checked)) {
+    document.getElementById('modal-warn').classList.add('show');
+    return;
+  }
+  closeModal();
+  const who = state.currentCase;
+  state.approvedCases.add(who);
+  // Show banner
+  document.getElementById('banner-approved').classList.add('show');
+  // Update status chip in header
+  const chips = document.getElementById('case-chips');
+  chips.innerHTML = `
+    <span class="status-chip green"><span class="status-dot"></span>Advisor Review Complete</span>
+    <span class="status-chip blue"><span class="status-dot"></span>Ready for Offer</span>
+  `;
+  // Update progress — advance to Final Offer step
+  advanceProgress();
+  // Disable approve btn
+  document.getElementById('btn-approve').disabled = true;
+  document.getElementById('btn-approve').innerHTML = '✓ Approved';
+  showToast('Decision logged: Application approved for next stage.');
+  // Update queue card
+  const card = document.getElementById('card-' + who);
+  if (card) {
+    card.querySelector('.risk-ribbon').className = 'risk-ribbon low';
+    card.querySelector('.queue-chips').innerHTML = `
+      <span class="status-chip green"><span class="status-dot"></span>Advisor Approved</span>
+      <span class="status-chip blue"><span class="status-dot"></span>Ready for Offer</span>
+    `;
+    const pct = card.querySelector('.q-pct');
+    pct.textContent = '95%';
+    pct.style.color = 'var(--green-dim)';
+    card.dataset.filter = 'ready';
+  }
+}
+
+function advanceProgress() {
+  // docs → done, ai → done, advisor → done, offer → active
+  const states = [
+    {dot:'pdot-docs', lbl:'plbl-docs'},
+    {dot:'pdot-ai', lbl:'plbl-ai'},
+    {dot:'pdot-advisor', lbl:'plbl-advisor'},
+  ];
+  states.forEach(s => {
+    const dot = document.getElementById(s.dot);
+    const lbl = document.getElementById(s.lbl);
+    dot.className = 'p-dot done';
+    dot.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>';
+    lbl.className = 'p-label done';
+  });
+  const offerDot = document.getElementById('pdot-offer');
+  const offerLbl = document.getElementById('plbl-offer');
+  offerDot.className = 'p-dot active';
+  offerDot.innerHTML = '';
+  offerLbl.className = 'p-label active';
+}
+
+// ── ESCALATE ──
+function escalate() {
+  showToast('Case escalated to senior advisor.');
+}
+
+// ── SEND MESSAGE ──
+function sendMessage() {
+  const input = document.getElementById('msg-input');
+  const text = input.value.trim();
+  if (!text) return;
+  const thread = document.getElementById('msg-thread');
+  const now = new Date();
+  const time = now.toLocaleTimeString('en-GB', {hour:'2-digit',minute:'2-digit'});
+  thread.innerHTML += `
+    <div>
+      <div class="msg-bubble advisor">${text}</div>
+      <div class="msg-meta right">You (M. Vidal) · Today, ${time}</div>
+    </div>`;
+  input.value = '';
+  thread.scrollTop = thread.scrollHeight;
+  showToast('Message sent to Lucas Martin.');
+}
+
+// ── TOAST ──
+function showToast(text) {
+  const t = document.getElementById('toast');
+  document.getElementById('toast-text').textContent = text;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3500);
+}
+
+// ── ACTIVITY ──
+function addActivity(text, type, time) {
+  // prepend to activity feed (simplified)
+}
+
+// ── SIDEBAR ──
+function setSidebarActive(el) {
+  document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// Close modal on overlay click
+document.getElementById('modal-approve').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+</script>
+</body>
+</html>
